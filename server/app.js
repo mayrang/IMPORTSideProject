@@ -13,11 +13,7 @@ app.use(helmet());
 app.use(cors());
 app.use(morgan('tiny'));
 
-app.use('/feed', feedRouter);
 app.use('/auth', authRouter);
-app.use('/friendship', friendshipRouter);
-app.use('/comment', commentRouter);
-app.use('/like', likeRouter);
 
 app.use((req, res, next) => {
     res.sendStatus(404);
