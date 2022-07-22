@@ -3,11 +3,7 @@ import 'express-async-errors';
 import cors from 'cors';
 import morgan from 'morgan';
 import helmet from 'helmet';
-import feedRouter from './router/feed.js';
 import authRouter from './router/auth.js';
-import friendshipRouter from './router/friendship.js';
-import commentRouter from './router/comment.js';
-import likeRouter from './router/like.js';
 import { config } from './config.js';
 
 const app = express();
