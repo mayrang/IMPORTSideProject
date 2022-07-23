@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types"
 import 'antd/dist/antd.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import '../styles/global.css';
 import Head from "next/head";
 import wrapper from "../store/configureStore";
 

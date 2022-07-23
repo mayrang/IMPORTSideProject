@@ -1,29 +1,10 @@
 import React, { useCallback } from "react";
-import {Menu, Button} from "antd";
-import Link from "next/link";
 import PropTypes from "prop-types";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import Container from "react-bootstrap/Container";
 
-const menuItems = [
-    {
-        label: <Link href={"/"} passHref><a>예약 보기</a></Link>,
-        key: "home",
-    },
-    {
-        label: (<Link href={"/profile"} passHref><a>프로필</a></Link>),
-        key: "profile",
-    },
-    {
-        label: (<Link href={"/logout"} passHref><a>로그아웃</a></Link>),
-        key: "logout",
-    },
-    {
-        label: (<Link href={"/signup"} passHref><a>회원가입</a></Link>),
-        key: "signup",
-    },
-];
+
 
 const AppLayout = ({children}) => {
     const clickLogout = useCallback(() => {
