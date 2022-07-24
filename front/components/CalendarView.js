@@ -3,7 +3,8 @@ import PropTypes from "prop-types";
 import {EllipsisOutlined} from "@ant-design/icons";
 import styled from "styled-components";
 import moment from "moment";
-import {Button} from "antd";
+import {Button, Modal} from "antd";
+
 
 
 const CalendarWrapper = styled.div`
@@ -89,6 +90,8 @@ const calendarArray = (year, month, posts) => {
  
 
 const CalendarView = ({posts}) => {
+    const [modalPosts, setModalPosts] = useState([]);
+    const [visible, setVisible] = useState(false);
     const [year, setYear] = useState(parseInt(moment().add(9, 'h').format('YYYY')));
     const [month, setMonth] = useState(parseInt(moment().add(9, 'h').format('MM')))
     
@@ -109,7 +112,22 @@ const CalendarView = ({posts}) => {
         }
     }, [month]);
 
+    const clickModal = useCallback((posts) => {
+        setModalPosts(posts);
+        setVisible(true);
+    }, []);
+
+    const cancelModal = useCallback(() => {
+        setVisible(false);
+    }, []);
+
     return (
+        <>
+        <Modal visible={visible} onCancel={cancelModal}>
+            {modalPosts.length > 0 ?
+            modalPosts.map((post) => <p key={post.id}>{post.User.name} {msToTime(post.startTime)} ~ {msToTime(post.endTime)}</p>) : 
+            <p>예약된 시간이 없습니다.</p>}
+        </Modal>
         <CalendarWrapper>
             <HeaderWrapper>
                 <Button onClick={clickPrev}><div>{"<"} 이전 달</div></Button>
@@ -133,12 +151,12 @@ const CalendarView = ({posts}) => {
                             <div className="dayDate">{day.day}</div>
                             {day.posts.length<4 ?
                             day.posts.map((post) => (
-                                <div key={post.id} style={scheduleStyle}>{post.User.name} {msToTime(post.startTime)} ~ {msToTime(post.endTime)}</div>
+                                <div key={post.id} style={scheduleStyle} onClick={() => clickModal(day.posts)}>{post.User.name} {msToTime(post.startTime)} ~ {msToTime(post.endTime)}</div>
                             )) :(
                                 <>
-                                <div style={scheduleStyle}>{posts[0].User.name} {msToTime(posts[0].startTime)} ~ {msToTime(posts[0].endTime)}</div>
-                                <div style={scheduleStyle}>{posts[1].User.name} {msToTime(posts[1].startTime)} ~ {msToTime(posts[1].endTime)}</div>
-                                <EllipsisOutlined style={{width: "100%", marginTop: "2px"}}/>
+                                <div style={scheduleStyle}  onClick={() => clickModal(day.posts)}>{day.posts[0].User.name} {msToTime(day.posts[0].startTime)} ~ {msToTime(day.posts[0].endTime)}</div>
+                                <div style={scheduleStyle}  onClick={() => clickModal(day.posts)}>{day.posts[1].User.name} {msToTime(day.posts[1].startTime)} ~ {msToTime(day.posts[1].endTime)}</div>
+                                <EllipsisOutlined style={{width: "100%", marginTop: "2px"}}  onClick={() => clickModal(posts)}/>
                                 </>
                             )}
                         </div>
@@ -146,6 +164,7 @@ const CalendarView = ({posts}) => {
                 </div>
             ))}
         </CalendarWrapper>
+        </>
     );
 };
 
