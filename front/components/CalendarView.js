@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import PropTypes from "prop-types";
-import {EllipsisOutlined} from "@ant-design/icons"
-import styled from "styled-components"
+import {EllipsisOutlined} from "@ant-design/icons";
+import styled from "styled-components";
+import moment from "moment";
+import {Button} from "antd";
+
 
 const CalendarWrapper = styled.div`
     max-width: 1300px;
@@ -54,8 +57,8 @@ function msToTime(duration) {
 
 const calendarArray = (year, month, posts) => {
     let newMonth = [];
-    const firstDay = new Date(year, month, 1).getDay();
-    const lastDay = new Date(year, month + 1, 0).getDate();
+    const firstDay = new Date(year, month - 1, 1).getDay();
+    const lastDay = new Date(year, month, 0).getDate();
     let count = 1;
     for(let i = 0; i < 6; i++){
         var week = [];
@@ -66,7 +69,7 @@ const calendarArray = (year, month, posts) => {
                 week.push({day: "", posts: []});
             }else{
                 const yearMonthDay = year 
-                                    + "-" + (month < 9 ? "0" + (month + 1) : month + 1) 
+                                    + "-" + (month < 10 ? "0" + (month) : month) 
                                     + "-" + (count < 10 ? "0" + count : count)
                 const findPosts = posts.filter((it) => it.day === yearMonthDay);
                 if(findPosts){
@@ -85,15 +88,33 @@ const calendarArray = (year, month, posts) => {
 
  
 
-const CalendarView = ({year, month, posts}) => {
+const CalendarView = ({posts}) => {
+    const [year, setYear] = useState(parseInt(moment().add(9, 'h').format('YYYY')));
+    const [month, setMonth] = useState(parseInt(moment().add(9, 'h').format('MM')))
     
-    
+    const clickNext = useCallback(() => {
+        if(month === 12){
+            setYear((prev) => prev + 1);
+            setMonth(1);
+        }else{
+            setMonth((prev) => prev + 1);
+        }
+    }, [month]);
+    const clickPrev = useCallback(() => {
+        if(month === 1){
+            setYear((prev) => prev - 1);
+            setMonth(12);
+        }else{
+            setMonth((prev) => prev - 1);
+        }
+    }, [month]);
+
     return (
         <CalendarWrapper>
             <HeaderWrapper>
-                <div>{"<"} 이전 달</div>
-                <div >{year}년 {month+1}월</div>
-                <div>다음 달 {">"}</div>
+                <Button onClick={clickPrev}><div>{"<"} 이전 달</div></Button>
+                <div>{year}년 {month}월</div>
+                <Button onClick={clickNext}><div>다음 달 {">"}</div></Button>
 
             </HeaderWrapper>
             <div className="grid dayHeader">
@@ -129,8 +150,6 @@ const CalendarView = ({year, month, posts}) => {
 };
 
 CalendarView.propTypes = {
-    year: PropTypes.number.isRequired,
-    month: PropTypes.number.isRequired,
     posts: PropTypes.array.isRequired,
 }
 

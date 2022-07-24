@@ -65,7 +65,7 @@ const dummyData = [
 const Home = () => {
     return (
         <AppLayout>
-            <CalendarView year={2022} month={6} posts={dummyData} />
+            <CalendarView posts={dummyData} />
         </AppLayout>
     )
 };
