@@ -1,9 +1,13 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import {EllipsisOutlined} from "@ant-design/icons";
 import styled from "styled-components";
 import moment from "moment";
 import {Button, Modal} from "antd";
+import ReservationModal from "./ReservationModal";
+import { useDispatch } from "react-redux";
+import { LOAD_POSTS_REQUEST } from "../reducers/post";
+import { dummyData } from "../pages";
 
 
 
@@ -14,6 +18,7 @@ const CalendarWrapper = styled.div`
     box-sizing: border-box;
     margin: auto;
     margin-top: .4rem;
+
 `
 
 const HeaderWrapper = styled.div`
@@ -26,6 +31,23 @@ const HeaderWrapper = styled.div`
         font-size: 16px;
     }
 `   
+
+const FloatButton = styled(Button)`
+    float: right;
+    box-shadow: 0 1px 2px 0;   
+    width: 20%;
+    min-width: 100px;
+    max-width: 150px;
+    height: 40px;
+    margin-top: .7rem;
+    margin-right: .7rem;
+    border: none;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.7em;
+    cursor: pointer;
+    outline: none;
+`
 
 
 
@@ -93,8 +115,22 @@ const CalendarView = ({posts}) => {
     const [modalPosts, setModalPosts] = useState([]);
     const [visible, setVisible] = useState(false);
     const [year, setYear] = useState(parseInt(moment().add(9, 'h').format('YYYY')));
-    const [month, setMonth] = useState(parseInt(moment().add(9, 'h').format('MM')))
-    
+    const [month, setMonth] = useState(parseInt(moment().add(9, 'h').format('MM')));
+    const [modalDay, setModalDay] = useState("");
+    const [reservationVisible, setReservationVisible] = useState(false);
+    const dispatch = useDispatch();
+
+
+    useEffect(() => {
+        dispatch({
+            type: LOAD_POSTS_REQUEST,
+            year: year,
+            month: month,
+            data: dummyData,
+        });
+        
+    }, [year, month])
+
     const clickNext = useCallback(() => {
         if(month === 12){
             setYear((prev) => prev + 1);
@@ -112,18 +148,28 @@ const CalendarView = ({posts}) => {
         }
     }, [month]);
 
-    const clickModal = useCallback((posts) => {
+    const clickModal = useCallback((posts, day) => {
         setModalPosts(posts);
         setVisible(true);
+        setModalDay(day);
     }, []);
 
     const cancelModal = useCallback(() => {
         setVisible(false);
     }, []);
 
+    const clickReservationModal = useCallback(() => {
+        setReservationVisible(true);
+    }, []);
+
+    const cancelReservationModal = useCallback(() => {
+        setReservationVisible(false);
+    }, []);
+
     return (
         <>
-        <Modal visible={visible} onCancel={cancelModal}>
+        <ReservationModal reservationVisible={reservationVisible} cancelReservationModal={cancelReservationModal} />
+        <Modal visible={visible} onCancel={cancelModal} title={modalDay + "일"}>
             {modalPosts.length > 0 ?
             modalPosts.map((post) => <p key={post.id}>{post.User.name} {msToTime(post.startTime)} ~ {msToTime(post.endTime)}</p>) : 
             <p>예약된 시간이 없습니다.</p>}
@@ -151,18 +197,19 @@ const CalendarView = ({posts}) => {
                             <div className="dayDate">{day.day}</div>
                             {day.posts.length<4 ?
                             day.posts.map((post) => (
-                                <div key={post.id} style={scheduleStyle} onClick={() => clickModal(day.posts)}>{post.User.name} {msToTime(post.startTime)} ~ {msToTime(post.endTime)}</div>
+                                <div key={post.id} style={scheduleStyle} onClick={() => clickModal(day.posts, day.day)}>{post.User.name} {msToTime(post.startTime)} ~ {msToTime(post.endTime)}</div>
                             )) :(
                                 <>
-                                <div style={scheduleStyle}  onClick={() => clickModal(day.posts)}>{day.posts[0].User.name} {msToTime(day.posts[0].startTime)} ~ {msToTime(day.posts[0].endTime)}</div>
-                                <div style={scheduleStyle}  onClick={() => clickModal(day.posts)}>{day.posts[1].User.name} {msToTime(day.posts[1].startTime)} ~ {msToTime(day.posts[1].endTime)}</div>
-                                <EllipsisOutlined style={{width: "100%", marginTop: "2px"}}  onClick={() => clickModal(posts)}/>
+                                <div style={scheduleStyle}  onClick={() => clickModal(day.posts, day.day)}>{day.posts[0].User.name} {msToTime(day.posts[0].startTime)} ~ {msToTime(day.posts[0].endTime)}</div>
+                                <div style={scheduleStyle}  onClick={() => clickModal(day.posts, day.day)}>{day.posts[1].User.name} {msToTime(day.posts[1].startTime)} ~ {msToTime(day.posts[1].endTime)}</div>
+                                <EllipsisOutlined style={{width: "100%", marginTop: "2px"}}  onClick={() => clickModal(day.posts, day.day)}/>
                                 </>
                             )}
                         </div>
                     ))}
                 </div>
             ))}
+            <FloatButton onClick={clickReservationModal}>글 쓰기</FloatButton>
         </CalendarWrapper>
         </>
     );
