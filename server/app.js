@@ -9,9 +9,9 @@ import { config } from './config.js';
 const app = express();
 
 app.use(express.json());
-app.use(helmet());
-app.use(cors());
-app.use(morgan('tiny'));
+// app.use(helmet());
+// app.use(cors());
+// app.use(morgan('tiny'));
 
 app.use('/auth', authRouter);
 
