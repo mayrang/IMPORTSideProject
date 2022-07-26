@@ -4,10 +4,10 @@ import {EllipsisOutlined} from "@ant-design/icons";
 import styled from "styled-components";
 import moment from "moment";
 import {Button, Modal} from "antd";
-import ReservationModal from "./ReservationModal";
 import { useDispatch } from "react-redux";
 import { LOAD_POSTS_REQUEST } from "../reducers/post";
 import { dummyData } from "../pages";
+import Router, { useRouter } from "next/router";
 
 
 
@@ -66,10 +66,10 @@ const scheduleStyle = {
   };
 
 function msToTime(duration) {
-    console.log(duration)
-    let second = Math.floor(duration/ 1000);
+    const localeDuration = duration + (1000 * 60 * 60 * 9)
+    let second = Math.floor(localeDuration/ 1000);
     let minute = Math.floor(second / 60);
-    let hour = Math.floor(minute /60);
+    let hour = Math.floor(minute /60) ;
 
     second = second % 60;
     minute = minute % 60;
@@ -114,10 +114,9 @@ const calendarArray = (year, month, posts) => {
 const CalendarView = ({posts}) => {
     const [modalPosts, setModalPosts] = useState([]);
     const [visible, setVisible] = useState(false);
-    const [year, setYear] = useState(parseInt(moment().add(9, 'h').format('YYYY')));
-    const [month, setMonth] = useState(parseInt(moment().add(9, 'h').format('MM')));
+    const router = useRouter();
+    const {year, month} = router.query
     const [modalDay, setModalDay] = useState("");
-    const [reservationVisible, setReservationVisible] = useState(false);
     const dispatch = useDispatch();
 
 
@@ -132,19 +131,45 @@ const CalendarView = ({posts}) => {
     }, [year, month])
 
     const clickNext = useCallback(() => {
-        if(month === 12){
-            setYear((prev) => prev + 1);
-            setMonth(1);
+        const calendarYear = year?year:parseInt(moment().add(9, 'h').format('YYYY'));
+        const calendarMonth = month?month:parseInt(moment().add(9, 'h').format('MM'));
+        if(parseInt(month) === 12){
+            router.push({
+                pathname: '/',
+                query: {
+                    year: (parseInt(calendarYear)+1).toString(),
+                    month: "1"
+                }
+            })
         }else{
-            setMonth((prev) => prev + 1);
+            router.push({
+                pathname: '/',
+                query: {
+                    year: calendarYear,
+                    month: (parseInt(calendarMonth)+1).toString()
+                }
+            })
         }
     }, [month]);
     const clickPrev = useCallback(() => {
-        if(month === 1){
-            setYear((prev) => prev - 1);
-            setMonth(12);
+        const calendarYear = year?year:parseInt(moment().add(9, 'h').format('YYYY'));
+        const calendarMonth = month?month:parseInt(moment().add(9, 'h').format('MM'));
+        if(parseInt(month) === 1){
+            router.push({
+                pathname: '/',
+                query: {
+                    year: (parseInt(calendarYear)-1).toString(),
+                    month: "12"
+                }
+            })
         }else{
-            setMonth((prev) => prev - 1);
+            router.push({
+                pathname: '/',
+                query: {
+                    year: calendarYear,
+                    month: (parseInt(calendarMonth)-1).toString()
+                }
+            })
         }
     }, [month]);
 
@@ -158,17 +183,12 @@ const CalendarView = ({posts}) => {
         setVisible(false);
     }, []);
 
-    const clickReservationModal = useCallback(() => {
-        setReservationVisible(true);
-    }, []);
-
-    const cancelReservationModal = useCallback(() => {
-        setReservationVisible(false);
+    const clickReservation = useCallback(() => {
+        Router.push('/reservation')
     }, []);
 
     return (
         <>
-        <ReservationModal reservationVisible={reservationVisible} cancelReservationModal={cancelReservationModal} />
         <Modal visible={visible} onCancel={cancelModal} title={modalDay + "일"}>
             {modalPosts.length > 0 ?
             modalPosts.map((post) => <p key={post.id}>{post.User.name} {msToTime(post.startTime)} ~ {msToTime(post.endTime)}</p>) : 
@@ -177,7 +197,7 @@ const CalendarView = ({posts}) => {
         <CalendarWrapper>
             <HeaderWrapper>
                 <Button onClick={clickPrev}><div>{"<"} 이전 달</div></Button>
-                <div>{year}년 {month}월</div>
+                <div>{year||parseInt(moment().add(9, 'h').format('YYYY'))}년 {month||parseInt(moment().add(9, 'h').format('MM'))}월</div>
                 <Button onClick={clickNext}><div>다음 달 {">"}</div></Button>
 
             </HeaderWrapper>
@@ -209,7 +229,7 @@ const CalendarView = ({posts}) => {
                     ))}
                 </div>
             ))}
-            <FloatButton onClick={clickReservationModal}>글 쓰기</FloatButton>
+            <FloatButton onClick={clickReservation}>글 쓰기</FloatButton>
         </CalendarWrapper>
         </>
     );
