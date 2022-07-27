@@ -6,10 +6,15 @@ import { ADD_POST_REQUEST, LOAD_POSTS_REQUEST } from "../reducers/post";
 import { dummyData } from ".";
 import moment from "moment";
 import { useRouter } from "next/router";
+import { cookieStringToObject } from "../utils/cookieString";
+import { LOAD_MY_INFO_REQUEST } from "../reducers/user";
+import { END } from "redux-saga";
+import wrapper from "../store/configureStore";
 
 const Reservation = () => {
     const [date, setDate] = useState("");
     const {loadPostsDone, monthPosts, addPostDone, addPostLoading} = useSelector((state) => state.post);
+    const {me} = useSelector((state) => state.user)
     const [loadPosts, setLoadPosts] = useState(false); 
     const [startTime, setStartTime] = useState();
     const [endTime, setEndTime] = useState();
@@ -18,6 +23,14 @@ const Reservation = () => {
     const [checkDate, setCheckDate] = useState(false)
     const dispatch = useDispatch();
     const router = useRouter();
+
+    useEffect(() => {
+        console.log(!me, !me.id)
+        if(!(me&&me.id)){
+            alert("로그인한 사용자만 글을 작성할수있습니다.");
+            router.replace("/login");
+        }
+    }, [me]);
 
     useEffect(() => {
         if(loadPostsDone&&loadPosts){
@@ -38,9 +51,6 @@ const Reservation = () => {
         }
     }, [addPostDone, date])
 
-    useEffect(() => {
-        console.log(startTime, endTime)
-    }, [startTime, endTime])
 
     const clickDate = useCallback((value, dateString) => {
         if(value){
@@ -109,6 +119,24 @@ const Reservation = () => {
         </AppLayout>
     );
 };
+
+
+export const getServerSideProps = wrapper.getServerSideProps((store) => async ({req}) => {
+    const cookie = req ? req.headers.cookie : '';
+    console.log(req&&cookieStringToObject(cookie)['jwtToken'])
+    
+
+    if(req&&cookieStringToObject(cookie)['jwtToken']){
+        store.dispatch({
+            type: LOAD_MY_INFO_REQUEST,
+            data: cookieStringToObject(cookie)['jwtToken']
+        });
+    }
+    
+    store.dispatch(END);
+    await store.sagaTask.toPromise();
+
+});
 
 export default Reservation
 

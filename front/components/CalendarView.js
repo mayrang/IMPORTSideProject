@@ -4,7 +4,7 @@ import {EllipsisOutlined} from "@ant-design/icons";
 import styled from "styled-components";
 import moment from "moment";
 import {Button, Modal} from "antd";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { LOAD_POSTS_REQUEST } from "../reducers/post";
 import { dummyData } from "../pages";
 import Router, { useRouter } from "next/router";
@@ -121,6 +121,7 @@ const CalendarView = ({posts}) => {
     const {year, month} = router.query
     const [modalDay, setModalDay] = useState("");
     const dispatch = useDispatch();
+    const {me} = useSelector((state) => state.user)
 
 
     useEffect(() => {
@@ -237,7 +238,7 @@ const CalendarView = ({posts}) => {
                     ))}
                 </div>
             ))}
-            <FloatButton onClick={clickReservation}>글 쓰기</FloatButton>
+            {me&&me.id&&<FloatButton onClick={clickReservation}>예약하기</FloatButton>}
         </CalendarWrapper>
         </>
     );
