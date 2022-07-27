@@ -43,7 +43,7 @@ export async function login(req, res) {
     res.status(200).json({ token, studentId });
 }
 
-// GET/auth/me -- check valid member by id
+// // GET/auth/me -- check valid member by id
 // export async function me(req, res, next){
 //     const user = await userRepository.findById(req.userId);
 //     if(!user){

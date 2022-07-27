@@ -12,8 +12,8 @@ export async function findById(id){
         .then((result) => result[0][0]);
 }
 
-export async function createUser(user){
-    const { studentId, password, name, phoneNumber, major, email } = user;
+export async function createUser(member){
+    const { studentId, password, name, phoneNumber, major, email } = member;
     return db
         .execute(
             'INSERT INTO member (studentId, password, name, phoneNumber, major, email) VALUES(?, ?, ?, ?, ?, ?)',

@@ -1,11 +1,11 @@
 import jwt from 'jsonwebtoken';
 import { config } from '../config.js';
-import * as userRepository from '../data/auth.js';
+import * as memberRepository from '../data/auth.js';
 
 const AUTH_ERROR = { message: 'Authentication Error' };
 
 export const isAuth = async (req, res, next) => {
-    const authHeader = req.get('Authorization');
+    const authHeader = req.get('Authorization');//front -> back
     if(!(authHeader && authHeader.startsWith('Bearer '))){
         return res.status(401).json(AUTH_ERROR);
     }
@@ -15,13 +15,13 @@ export const isAuth = async (req, res, next) => {
         if (error) {
             return res.status(401).json(AUTH_ERROR);
         }
-        const user = await userRepository.findById(decoded.id);
-        if(!user) {
+        const member = await memberRepository.findById(decoded.id);
+        if(!member) {
             return res.status(401).json(AUTH_ERROR);
         }
-        req.userId = user.id;
-        req.token = token;
+
+        res.status(200).json({ token: token, memberId:member.id })//필요한 리턴값
+
         next();
     });
 };
-//use when reservation~
