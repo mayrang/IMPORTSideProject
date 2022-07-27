@@ -4,7 +4,7 @@ import cors from 'cors';
 import morgan from 'morgan';
 import helmet from 'helmet';
 import authRouter from './router/auth.js';
-import reservationRouter from './router/reservation'
+import reservationRouter from './router/reservation.js'
 import { config } from './config.js';
 
 const app = express();

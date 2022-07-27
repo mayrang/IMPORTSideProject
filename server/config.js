@@ -27,4 +27,9 @@ export const config = {
         password: required('DB_PASSWORD', ''),
     },
     port: parseInt(required('PORT', 8080)),
+    openapi:{
+        url: 'http://apis.data.go.kr/B090041/openapi/service/SpcdeInfoService/getRestDeInfo?_type=json&ServiceKey=Niwi7%2B0aHsdTk6Ee1rHwCWVCzC4wSGpiSShsVLL2%2FHFtQI1l00G3Q6%2FvtolM14t5GdIbYxt32o6GY13rAy4yCA%3D%3D',
+        year: '&solYear=',
+        month: '&solMonth='
+    }
 }

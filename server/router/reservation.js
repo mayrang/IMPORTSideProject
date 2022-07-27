@@ -2,6 +2,7 @@ import express from 'express'
 import 'express-async-errors'
 // import { body } from 'express-validator'
 import axios from 'axios'
+import { config } from '../config.js'
 
 const router = express.Router();
 
@@ -16,3 +17,5 @@ router.get('/', (req,res,next)=>{
         console.log(response.data.response.body.items.item);
       })
 })
+
+export default router;
