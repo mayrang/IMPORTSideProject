@@ -14,9 +14,8 @@ import Router, { useRouter } from "next/router";
 const CalendarWrapper = styled.div`
     max-width: 1300px;
     padding: 0 1.4rem;
-    max-height: auto
     box-sizing: border-box;
-    margin: auto;
+    max-height: auto;
     margin-top: .4rem;
 
 `
@@ -51,19 +50,23 @@ const FloatButton = styled(Button)`
 
 
 
-const scheduleStyle = {
-    height: "20%",
-    width: "100%",
-    minHeight: "11px",
-    backgroundColor: "#112667",
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-    color: "#fff",
-    padding: "1px",
-    marginTop: ".1rem",
-    fontSize: "0.5em",
-    cursor:"pointer",
-  };
+
+
+const ScheduleDiv = styled.div`
+    min-height: 10px;
+    background-color: #112667;
+    height: 20%;
+    max-width: 100%;
+    
+    color: #fff;
+    padding: 1px;
+    margin-top: .1rem;
+    font-size: .5em;
+    cursor: pointer;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+`
 
 function msToTime(duration) {
     const localeDuration = duration + (1000 * 60 * 60 * 9)
@@ -121,6 +124,7 @@ const CalendarView = ({posts}) => {
 
 
     useEffect(() => {
+        console.log(posts)
         dispatch({
             type: LOAD_POSTS_REQUEST,
             year: year,
@@ -130,9 +134,12 @@ const CalendarView = ({posts}) => {
         
     }, [year, month])
 
+
+
     const clickNext = useCallback(() => {
         const calendarYear = year?year:parseInt(moment().add(9, 'h').format('YYYY'));
         const calendarMonth = month?month:parseInt(moment().add(9, 'h').format('MM'));
+        console.log(calendarYear, calendarMonth)
         if(parseInt(month) === 12){
             router.push({
                 pathname: '/',
@@ -142,10 +149,11 @@ const CalendarView = ({posts}) => {
                 }
             })
         }else{
+            console.log(123)
             router.push({
                 pathname: '/',
                 query: {
-                    year: calendarYear,
+                    year: calendarYear.toString(),
                     month: (parseInt(calendarMonth)+1).toString()
                 }
             })
@@ -166,7 +174,7 @@ const CalendarView = ({posts}) => {
             router.push({
                 pathname: '/',
                 query: {
-                    year: calendarYear,
+                    year: calendarYear.toString(),
                     month: (parseInt(calendarMonth)-1).toString()
                 }
             })
@@ -210,18 +218,18 @@ const CalendarView = ({posts}) => {
                 <div>FRI</div>
                 <div>SAT</div>
             </div>
-            {calendarArray(year, month, posts).map((week, idx) => (
+            {calendarArray(year||parseInt(moment().add(9, 'h').format('YYYY')), month||parseInt(moment().add(9, 'h').format('MM')), posts).map((week, idx) => (
                 <div key={`week${idx}`} className="grid dayBody">
                     {week.map((day, idx) => (
                         <div key={`day${idx}`}>
                             <div className="dayDate">{day.day}</div>
                             {day.posts.length<4 ?
                             day.posts.map((post) => (
-                                <div key={post.id} style={scheduleStyle} onClick={() => clickModal(day.posts, day.day)}>{post.User.name} {msToTime(post.startTime)} ~ {msToTime(post.endTime)}</div>
+                                <ScheduleDiv key={post.id} onClick={() => clickModal(day.posts, day.day)}>{post.User.name} {msToTime(post.startTime)} ~ {msToTime(post.endTime)}</ScheduleDiv>
                             )) :(
                                 <>
-                                <div style={scheduleStyle}  onClick={() => clickModal(day.posts, day.day)}>{day.posts[0].User.name} {msToTime(day.posts[0].startTime)} ~ {msToTime(day.posts[0].endTime)}</div>
-                                <div style={scheduleStyle}  onClick={() => clickModal(day.posts, day.day)}>{day.posts[1].User.name} {msToTime(day.posts[1].startTime)} ~ {msToTime(day.posts[1].endTime)}</div>
+                                <ScheduleDiv  onClick={() => clickModal(day.posts, day.day)}>{day.posts[0].User.name} {msToTime(day.posts[0].startTime)} ~ {msToTime(day.posts[0].endTime)}</ScheduleDiv>
+                                <ScheduleDiv  onClick={() => clickModal(day.posts, day.day)}>{day.posts[1].User.name} {msToTime(day.posts[1].startTime)} ~ {msToTime(day.posts[1].endTime)}</ScheduleDiv>
                                 <EllipsisOutlined style={{width: "100%", marginTop: "2px"}}  onClick={() => clickModal(day.posts, day.day)}/>
                                 </>
                             )}

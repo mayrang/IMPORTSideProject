@@ -6,6 +6,8 @@ import wrapper from "../store/configureStore";
 import { LOAD_POSTS_REQUEST } from "../reducers/post";
 import { END } from "redux-saga";
 import {useSelector} from "react-redux";
+import { cookieStringToObject } from "../utils/cookieString";
+import { LOAD_MY_INFO_REQUEST } from "../reducers/user";
 
 
 //moment valueOf 안붙이면 moment객체로 가는데 그것도 miliseconds로 인식하는듯?
@@ -76,11 +78,13 @@ const Home = () => {
     )
 };
 
-export const getServerSideProps = wrapper.getServerSideProps((store) => async ({query}) => {
-    console.log(query.year, query.month)
+export const getServerSideProps = wrapper.getServerSideProps((store) => async ({query, req}) => {
+    const cookie = req ? req.headers.cookie : '';
+    console.log(req&&cookieStringToObject(cookie)['jwtToken'])
     
     if(query.year&&query.month){
-        if(!isNaN(query.year)||!isNaN(query.month)||query.month>0||query.month<13){
+        console.log("match" , query.year.match(/^[0-9]+$/))
+        if(query.year.match(/^[0-9]+$/) === null||query.month.match(/^[0-9]+$/) === null||parseInt(query.month)<0||parseInt(query.month)>13){
             return {
                 redirect: {
                     permanent: false,
@@ -102,10 +106,17 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
             data: dummyData,
         });
     }
+    if(req&&cookieStringToObject(cookie)['jwtToken']){
+        store.dispatch({
+            type: LOAD_MY_INFO_REQUEST,
+            data: cookieStringToObject(cookie)['jwtToken']
+        });
+    }
     
     store.dispatch(END);
     await store.sagaTask.toPromise();
 
 });
+
 
 export default Home;

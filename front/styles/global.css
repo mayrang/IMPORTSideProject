@@ -14,18 +14,18 @@
     grid-template-columns: repeat(7, 1fr);
 }
 
-.grid div {
-    font-size: .8rem;
-}
 
 .dayBody > div {
+    height: 100%;
     color: #222;
     font-weight: bold;
     min-height: 6rem;
     border: 1px solid #eee;
+    overflow-x: auto;
 }
 
 .dayBody .dayDate {
+    font-size: 0.8rem;
     margin-top: .3rem;
     margin-left: .3rem;
 
