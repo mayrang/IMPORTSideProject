@@ -23,7 +23,7 @@ const LoginForm = () => {
     }, [])
 
     return (
-        <Form onFinish={submitLogin}>
+        <Form onFinish={submitLogin} layout="vertical">
             <Form.Item label="ID" name="studentId" rules={[
                 {required: true, message: "ID는 필수 입력 항목입니다."},
             ]}>

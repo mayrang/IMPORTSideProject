@@ -48,7 +48,10 @@ function* addPost(action){
 }
 
 function addPostAPI(data){
-    return axios.post('/reservation', data)
+    return axios.post('/reservation', data, {
+        headers: {
+            'Authorization': `Bearer ${data}`
+        }});
 }
 
 export default function* postSaga() {

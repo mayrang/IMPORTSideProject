@@ -4,7 +4,6 @@ import { dummyMyInfo, LOAD_MY_INFO_FAILURE, LOAD_MY_INFO_REQUEST, LOAD_MY_INFO_S
 import { removeCookie, setCookie } from "../utils/cookie";
 
 
-
 function* watchSignUp() {
     yield takeLatest(SIGN_UP_REQUEST ,signUp);
 }
@@ -17,7 +16,7 @@ function* signUp(action) {
             data: dummyMyInfo
         });
         // axios.defaults.headers.common['Authorization'] = `Bearer ${result.data.jwtToken}`
-        setCookie('jwtToken', "12345", {path: "/"});
+        setCookie('jwtToken', "12345", {path: "/", maxAge: 1800});
 
     }catch(err){
         console.error(err);
@@ -44,7 +43,7 @@ function* logIn(action){
             data: dummyMyInfo,
         });
         //axios.defaults.headers.common['Authorization'] = `Bearer ${result.data.jwtToken}`
-        setCookie('jwtToken', "12345", {path: "/"})
+        setCookie('jwtToken', "12345", {path: "/", maxAge: 1800})
     }catch(err){
         console.error(err);
         yield put({
@@ -70,7 +69,7 @@ function* loadMyInfo(action){
             data: dummyMyInfo,
         });
         //axios.defaults.headers.common['Authorization'] = `Bearer ${result.data.jwtToken}`
-        setCookie('jwtToken', "12345", {path: "/"})
+        setCookie('jwtToken', "12345", {path: "/", maxAge: 1800, httpOnly: true})
     }catch(err){
         console.error(err);
         yield put({
@@ -81,7 +80,7 @@ function* loadMyInfo(action){
 }
 
 function loadMyInfoAPI(data){
-    return axios.get('/auth', {
+    return axios.get('/auth',{}, {
         headers: {
             'Authorization': `Bearer ${data}`
         }
