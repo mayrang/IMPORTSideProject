@@ -1,7 +1,8 @@
 import produce from 'immer';
-import moment from 'moment';
+// import moment from 'moment';
 
 const initialState = {
+    holidays: [],
     monthPosts : [],
     testPost : {},
     loadPostsLoading: false,
@@ -10,6 +11,9 @@ const initialState = {
     addPostLoading: false,
     addPostDone: false,
     addPostError: null,
+    loadHolidayLoading: false,
+    loadHolidayDone: false,
+    loadHolidayError: null,
 };
 
 
@@ -20,6 +24,11 @@ export const LOAD_POSTS_FAILURE = "LOAD_POSTS_FAILURE";
 export const ADD_POST_REQUEST = "ADD_POST_REQUEST";
 export const ADD_POST_SUCCESS = "ADD_POST_SUCCESS";
 export const ADD_POST_FAILURE = "ADD_POST_FAILURE";
+export const LOAD_HOLIDAY_REQUEST = "LOAD_HOLIDAY_REQUEST";
+export const LOAD_HOLIDAY_SUCCESS = "LOAD_HOLIDAY_SUCCESS";
+export const LOAD_HOLIDAY_FAILURE = "LOAD_HOLIDAY_FAILURE";
+
+
 
 const reducer = (state=initialState, action) => {
     return produce(state, (draft) => {
@@ -51,6 +60,20 @@ const reducer = (state=initialState, action) => {
             case ADD_POST_FAILURE:
                 draft.addPostLoading = false;
                 draft.addPostError = action.error;
+                break;
+            case LOAD_HOLIDAY_REQUEST:
+                draft.loadHolidayLoading = true;
+                draft.loadHolidayDone = false;
+                draft.loadHolidayError = null;
+                break;
+            case LOAD_HOLIDAY_SUCCESS:
+                draft.loadHolidayLoading = false;
+                draft.loadHolidayDone = true;
+                draft.holidays = action.data;
+                break;
+            case LOAD_HOLIDAY_FAILURE:
+                draft.loadHolidayError = action.error;
+                draft.loadHolidayLoading = false;
                 break;
             default:
                 break;

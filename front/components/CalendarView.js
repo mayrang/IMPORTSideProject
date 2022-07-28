@@ -81,7 +81,7 @@ function msToTime(duration) {
   }
 
 
-const calendarArray = (year, month, posts) => {
+const calendarArray = (year, month, posts, holidays) => {
     let newMonth = [];
     const firstDay = new Date(year, month - 1, 1).getDay();
     const lastDay = new Date(year, month, 0).getDate();
@@ -94,14 +94,28 @@ const calendarArray = (year, month, posts) => {
             }else if(firstDay > j && i === 0){
                 week.push({day: "", posts: []});
             }else{
-                const yearMonthDay = year 
+                const yearMonthDayPosts = year 
                                     + "-" + (month < 10 ? "0" + (month) : month) 
-                                    + "-" + (count < 10 ? "0" + count : count)
-                const findPosts = posts.filter((it) => it.day === yearMonthDay);
+                                    + "-" + (count < 10 ? "0" + count : count);
+                const yearMonthDayHolidays = year
+                                        + (month < 10 ? "0" + (month) : month)
+                                        + (count < 10 ? "0" + count : count);
+                const findHoliday = holidays.find((it) => it.locdate.toString() === yearMonthDayHolidays)
+                let findPosts = posts.filter((it) => it.day === yearMonthDayPosts);
+                findPosts.sort((a, b) => a.startTime - b.startTime);
                 if(findPosts){
-                    week.push({day: count.toString(), posts: findPosts});
+                    if(findHoliday){
+                        week.push({day: count.toString(), posts: findPosts, holidays: findHoliday});
+                    }else{
+                        week.push({day: count.toString(), posts: findPosts, holidays: {}});
+                    }
+                    
                 }else{
-                    week.push({day: count.toString(), posts: []});
+                    if(findHoliday){
+                        week.push({day: count.toString(), posts: [], holidays: findHoliday});
+                    }else{
+                        week.push({day: count.toString(), posts: [], holidays: {}});
+                    }
                 }
                 count++; 
             }
@@ -114,7 +128,7 @@ const calendarArray = (year, month, posts) => {
 
  
 
-const CalendarView = ({posts}) => {
+const CalendarView = ({posts, holidays}) => {
     const [modalPosts, setModalPosts] = useState([]);
     const [visible, setVisible] = useState(false);
     const router = useRouter();
@@ -122,10 +136,13 @@ const CalendarView = ({posts}) => {
     const [modalDay, setModalDay] = useState("");
     const dispatch = useDispatch();
     const {me} = useSelector((state) => state.user)
+    const calendarYear = year||parseInt(moment().format('YYYY'));
+    const calendarMonth = month||parseInt(moment().format('MM'));
+    const checkToday = moment(`${year}, ${month}`, 'YYYYMMDDHHmmss').format("YYYY-MM")
 
 
     useEffect(() => {
-        console.log(posts)
+        console.log(calendarYear, calendarMonth)
         dispatch({
             type: LOAD_POSTS_REQUEST,
             year: year,
@@ -133,14 +150,11 @@ const CalendarView = ({posts}) => {
             data: dummyData,
         });
         
-    }, [year, month])
+    }, [calendarYear, calendarMonth])
 
 
 
     const clickNext = useCallback(() => {
-        const calendarYear = year?year:parseInt(moment().add(9, 'h').format('YYYY'));
-        const calendarMonth = month?month:parseInt(moment().add(9, 'h').format('MM'));
-        console.log(calendarYear, calendarMonth)
         if(parseInt(month) === 12){
             router.push({
                 pathname: '/',
@@ -160,9 +174,8 @@ const CalendarView = ({posts}) => {
             })
         }
     }, [month]);
+
     const clickPrev = useCallback(() => {
-        const calendarYear = year?year:parseInt(moment().add(9, 'h').format('YYYY'));
-        const calendarMonth = month?month:parseInt(moment().add(9, 'h').format('MM'));
         if(parseInt(month) === 1){
             router.push({
                 pathname: '/',
@@ -206,7 +219,7 @@ const CalendarView = ({posts}) => {
         <CalendarWrapper>
             <HeaderWrapper>
                 <Button onClick={clickPrev}><div>{"<"} 이전 달</div></Button>
-                <div>{year||parseInt(moment().add(9, 'h').format('YYYY'))}년 {month||parseInt(moment().add(9, 'h').format('MM'))}월</div>
+                <div>{calendarYear}년 {calendarMonth}월</div>
                 <Button onClick={clickNext}><div>다음 달 {">"}</div></Button>
 
             </HeaderWrapper>
@@ -219,11 +232,14 @@ const CalendarView = ({posts}) => {
                 <div>FRI</div>
                 <div>SAT</div>
             </div>
-            {calendarArray(year||parseInt(moment().add(9, 'h').format('YYYY')), month||parseInt(moment().add(9, 'h').format('MM')), posts).map((week, idx) => (
+            {calendarArray(calendarYear, calendarMonth, posts, holidays).map((week, idx) => (
                 <div key={`week${idx}`} className="grid dayBody">
                     {week.map((day, idx) => (
                         <div key={`day${idx}`}>
-                            <div className="dayDate">{day.day}</div>
+                            {idx===0||day.holidays?.dateName? 
+                            <div style={{color:"red"}} className="dayDate"><p style={moment().format('YYYY-MM-DD')===(checkToday+"-"+(parseInt(day.day) < 10 ? "0" + day.day : day.day))?{margin: "1px", color:"white", backgroundColor:"red", display: "inline-block", textAlign:"center", padding:".1em"}:{margin: "1px", color:"red", display:"inline-block"}}>{day.day}</p>  {day.holidays?.dateName}</div>
+                            : 
+                            <div className="dayDate"><p style={moment().format('YYYY-MM-DD')===(checkToday+"-"+(parseInt(day.day) < 10 ? "0" + day.day : day.day))?{margin: "1px", color:"white", backgroundColor:"black", display: "inline-block", textAlign:"center", padding:".1em"}:{margin: "1px", color:"black", display:"inline-block"}}>{day.day}</p></div>}
                             {day.posts.length<4 ?
                             day.posts.map((post) => (
                                 <ScheduleDiv key={post.id} onClick={() => clickModal(day.posts, day.day)}>{post.User.name} {msToTime(post.startTime)} ~ {msToTime(post.endTime)}</ScheduleDiv>
@@ -246,6 +262,7 @@ const CalendarView = ({posts}) => {
 
 CalendarView.propTypes = {
     posts: PropTypes.array.isRequired,
+    holidays: PropTypes.array.isRequired,
 }
 
 export default CalendarView;

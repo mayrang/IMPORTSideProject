@@ -63,6 +63,7 @@ function* watchLoadMyInfo(){
 
 function* loadMyInfo(action){
     try{
+        //const token = getCookie('jwtToken')
         //const result = yield call(loadMyInfoAPI, action.data);
         yield put({
             type: LOAD_MY_INFO_SUCCESS,
