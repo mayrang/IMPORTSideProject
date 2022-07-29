@@ -15,8 +15,9 @@ const CalendarWrapper = styled.div`
     max-width: 1300px;
     padding: 0 1.4rem;
     box-sizing: border-box;
-    max-height: auto;
+    min-height: auto;
     margin-top: .4rem;
+    margin: auto
 
 `
 
@@ -27,7 +28,7 @@ const HeaderWrapper = styled.div`
     font-weight: bold;
     box-sizing: border-box;
     div {
-        font-size: 16px;
+        font-size: 25px;
     }
 `   
 
@@ -246,9 +247,9 @@ const CalendarView = ({posts, holidays}) => {
                 <div key={`week${idx}`} className="grid dayBody">
                     {week.map((day, idx) => (
                         <div key={`day${idx}`}>
-                            {idx===0||day.holidays?.dateName? 
+                            {idx===0||day.holidays?.dateName?
                             <div style={{color:"red"}} className="dayDate"><p style={moment().format('YYYY-MM-DD')===(checkToday+"-"+(parseInt(day.day) < 10 ? "0" + day.day : day.day))?{margin: "1px", color:"white", backgroundColor:"red", display: "inline-block", textAlign:"center", padding:".1em"}:{margin: "1px", color:"red", display:"inline-block"}}>{day.day}</p> <p style={{display: "inline-block", fontSize: ".3rem", marginBottom: "1px"}}>{day.holidays?.dateName}</p></div>
-                            : 
+                            :
                             <div className="dayDate"><p style={moment().format('YYYY-MM-DD')===(checkToday+"-"+(parseInt(day.day) < 10 ? "0" + day.day : day.day))?{margin: "1px", color:"white", backgroundColor:"black", display: "inline-block", textAlign:"center", padding:".1em"}:{margin: "1px", color:"black", display:"inline-block"}}>{day.day}</p></div>}
                             {day.posts.length<3 ?
                             day.posts.map((post) => (
