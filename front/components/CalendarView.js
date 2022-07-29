@@ -6,7 +6,7 @@ import moment from "moment";
 import {Button, List, Modal} from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { LOAD_POSTS_REQUEST } from "../reducers/post";
-import { dummyData } from "../pages";
+import { dummyData } from "../utils/dummy"
 import Router, { useRouter } from "next/router";
 
 
@@ -216,7 +216,7 @@ const CalendarView = ({posts, holidays}) => {
                 itemLayout="horizontal"
                 dataSource={modalPosts}
                 renderItem={(item) => (
-                    <List.Item>
+                    <List.Item actions={me.id&&me.Posts.find((it)=>it.id === item.id)&&[<a key={item.id}>수정</a>]}>
                         <List.Item.Meta
                             title={item.User.name}
                             description={msToTime(item.startTime) +"~"+ msToTime(item.endTime)}

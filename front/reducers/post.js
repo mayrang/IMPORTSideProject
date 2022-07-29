@@ -14,6 +14,9 @@ const initialState = {
     loadHolidayLoading: false,
     loadHolidayDone: false,
     loadHolidayError: null,
+    loadMyPostsLoading: false,
+    loadMyPostsDone: false,
+    loadMyPostsError: null,
 };
 
 
@@ -27,6 +30,9 @@ export const ADD_POST_FAILURE = "ADD_POST_FAILURE";
 export const LOAD_HOLIDAY_REQUEST = "LOAD_HOLIDAY_REQUEST";
 export const LOAD_HOLIDAY_SUCCESS = "LOAD_HOLIDAY_SUCCESS";
 export const LOAD_HOLIDAY_FAILURE = "LOAD_HOLIDAY_FAILURE";
+export const LOAD_MY_POSTS_REQUEST = "LOAD_MY_POSTS_REQUEST";
+export const LOAD_MY_POSTS_SUCCESS = "LOAD_MY_POSTS_SUCCESS";
+export const LOAD_MY_POSTS_FAILURE = "LOAD_MY_POSTS_FAILURE";
 
 
 
@@ -74,6 +80,20 @@ const reducer = (state=initialState, action) => {
             case LOAD_HOLIDAY_FAILURE:
                 draft.loadHolidayError = action.error;
                 draft.loadHolidayLoading = false;
+                break;
+            case LOAD_MY_POSTS_REQUEST:
+                draft.loadMyPostsLoading = true;
+                draft.loadMyPostsDone = false;
+                draft.loadMyPostsError = null;
+                break;
+            case LOAD_MY_POSTS_SUCCESS:
+                draft.loadMyPostsLoading = false;
+                draft.loadMyPostsDone = true;
+                draft.monthPosts = action.data;
+                break;
+            case LOAD_MY_POSTS_FAILURE:
+                draft.loadMyPostsLoading = false;
+                draft.loadMyPostsError = action.error;
                 break;
             default:
                 break;

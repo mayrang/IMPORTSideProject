@@ -1,8 +1,9 @@
 import axios from "axios";
 import { all, call, fork, put, takeLatest } from "redux-saga/effects";
 
-import { ADD_POST_FAILURE, ADD_POST_REQUEST, ADD_POST_SUCCESS, LOAD_HOLIDAY_FAILURE, LOAD_HOLIDAY_REQUEST, LOAD_HOLIDAY_SUCCESS, LOAD_POSTS_FAILURE, LOAD_POSTS_REQUEST, LOAD_POSTS_SUCCESS } from "../reducers/post";
+import { ADD_POST_FAILURE, ADD_POST_REQUEST, ADD_POST_SUCCESS, LOAD_HOLIDAY_FAILURE, LOAD_HOLIDAY_REQUEST, LOAD_HOLIDAY_SUCCESS, LOAD_MY_POSTS_FAILURE, LOAD_MY_POSTS_REQUEST, LOAD_MY_POSTS_SUCCESS, LOAD_POSTS_FAILURE, LOAD_POSTS_REQUEST, LOAD_POSTS_SUCCESS } from "../reducers/post";
 import { getCookie } from "../utils/cookie";
+import { dummyMyPosts } from "../utils/dummy";
 
 function* watchLoadPosts () {
     yield takeLatest(LOAD_POSTS_REQUEST, loadPosts);
@@ -82,10 +83,36 @@ function loadHolidayAPI(year, month){
     return axios.get(`/holiday?year=${year}&month=${month}`)
 }
 
+
+function* watchLoadMyPosts(){
+    yield takeLatest(LOAD_MY_POSTS_REQUEST, loadMyPosts);
+}
+
+function* loadMyPosts(year, month){
+    try{
+//      const result = yield call(loadMyPostsAPI, year, month);
+        yield put({
+            type: LOAD_MY_POSTS_SUCCESS,
+            data: dummyMyPosts,
+        });
+    }catch(err){
+        console.error(err);
+        yield put({
+            type: LOAD_MY_POSTS_FAILURE,
+            error: err.response.data
+        });
+    }
+}
+
+function loadMyPostsAPI(year, month){
+    return axios.get(`/test?year=${year}&month=${month}`);
+}
+
 export default function* postSaga() {
     yield all([
         fork(watchLoadPosts),
         fork(watchAddPost),
         fork(watchLoadHoliday),
+        fork(watchLoadMyPosts),
     ])
 }

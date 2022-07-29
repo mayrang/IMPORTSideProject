@@ -3,7 +3,7 @@ import AppLayout from '../components/AppLayout';
 import { Button, DatePicker, Divider, Steps, TimePicker } from 'antd';
 import { useDispatch, useSelector } from "react-redux";
 import { ADD_POST_REQUEST, LOAD_POSTS_REQUEST } from "../reducers/post";
-import { dummyData } from ".";
+import { dummyData } from "../utils/dummy";
 import moment from "moment";
 import { useRouter } from "next/router";
 import { cookieStringToObject } from "../utils/cookieString";

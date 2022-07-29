@@ -16,65 +16,7 @@ const initialState = {
     logOutError: null,
 };
 
-export const dummyMyInfo = {
-    id: 1,
-    name: "박건상",
-    Posts: [
-        {
-            day: "2022-07-12",
-            id: 1,
-            User: {
-                id: 1,
-                name: "박건상"
-            },
-            startTime: moment('2022-07-12 10:35').valueOf(),
-            endTime: moment('2022-07-12 12:00').valueOf(),
-        },
-        {
-            day: "2022-07-12",
-            id: 2,
-            User: {
-                id: 1,
-                name: "박건상"
-            },
-            startTime: moment('2022-07-12 13:30').valueOf(),
-            endTime: moment('2022-07-12 15:00').valueOf(),
-    
-        },
-        {
-            day: "2022-07-12",
-            id: 3,
-            User: {
-                id: 1,
-                name: "박건상"
-            },
-            startTime: moment('2022-07-12 16:30').valueOf(),
-            endTime: moment('2022-07-12 17:30').valueOf(),
-        },
-        {
-            day: "2022-07-12",
-            id: 4,
-            User: {
-                id: 1,
-                name: "박건상"
-            },
-            startTime: moment('2022-07-12 19:30').valueOf(),
-            endTime: moment('2022-07-12 20:30').valueOf(),
-    
-        },
-        {
-            day: "2022-07-24",
-            id: 5,
-            User: {
-                id: 1,
-                name: "박건상"
-            },
-            startTime: moment().valueOf(),
-            endTime: moment().valueOf(),
-    
-        }
-    ]
-}
+
 
 
 export const SIGN_UP_REQUEST = "SIGN_UP_REQUEST";
