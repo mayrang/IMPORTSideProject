@@ -12,9 +12,9 @@ const validateCredential = [
         .trim()
         .notEmpty()
         .withMessage('invalid studentId'),
-    body('password')//TODO:아이디에 대소문자 등등
+    body('password')
         .trim()
-        .isLength({ min: 5 })
+        .isLength({ min: 5 })//TODO:아이디에 대소문자 등등에따라 제약조건 변경
         .withMessage('password should be at least 5 characters'),
     validate,
 ];
