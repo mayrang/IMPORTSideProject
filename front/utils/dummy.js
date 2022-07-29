@@ -1,5 +1,8 @@
 import moment from "moment";
 
+
+//moment valueOf 안붙이면 moment객체로 가는데 그것도 miliseconds로 인식하는듯?
+
 export const dummyData = [
    
     {
@@ -45,14 +48,14 @@ export const dummyData = [
         endTime: moment('2022-07-12 17:30').valueOf(),
     },
     {
-        day: "2022-07-29",
+        day: "2022-07-31",
         id: 5,
         User: {
             id: 1,
             name: "박건상"
         },
-        startTime: moment().valueOf(),
-        endTime: moment().valueOf(),
+        startTime: moment("2022-07-31 19:30").valueOf(),
+        endTime: moment("2022-07-31 20:20").valueOf(),
 
     },
     {
@@ -149,14 +152,14 @@ export const dummyMyInfo = {
 
 export const dummyMyPosts = [
     {
-        day: "2022-07-29",
+        day: "2022-07-31",
         id: 5,
         User: {
             id: 1,
             name: "박건상"
         },
-        startTime: moment().valueOf(),
-        endTime: moment().valueOf(),
+        startTime: moment("2022-07-31 19:30").valueOf(),
+        endTime: moment("2022-07-31 20:20").valueOf(),
 
     },
     {
@@ -180,3 +183,14 @@ export const dummyMyPosts = [
         endTime: moment('2022-07-12 20:30').valueOf(),
     },
 ]
+
+export const findSinglePost = (id) => {
+    
+    const findPost = dummyMyInfo.Posts.find((it) => it.id === parseInt(id));
+    if(findPost){
+        console.log(dummyData.find((it) => it.id == parseInt(id)))
+        return dummyData.find((it) => it.id == parseInt(id));
+    }else{
+        return {};
+    }
+}

@@ -1,7 +1,7 @@
 import moment from "moment";
 import React, { useEffect } from "react";
 import { END } from "redux-saga";
-import { dummyData, dummyHolidays } from "../utils/dummy";
+import { dummyData, dummyHolidays, dummyMyInfo, dummyMyPosts } from "../utils/dummy";
 import AppLayout from "../components/AppLayout";
 import CalendarView from "../components/CalendarView";
 import { LOAD_HOLIDAY_REQUEST, LOAD_MY_POSTS_REQUEST } from "../reducers/post";
@@ -21,7 +21,7 @@ const Profile = () => {
             alert("로그인한 사용자만 접속 가능합니다.")
             router.replace("/");
         }
-    }, [me]);
+    }, [me&&me.id]);
     useEffect(() => {
         console.log(monthPosts, holidays)
     }, [monthPosts, holidays])
@@ -51,7 +51,7 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
             type: LOAD_MY_POSTS_REQUEST,
             year: parseInt(query.year),
             month: parseInt(query.month),
-            data: dummyData,
+            data: dummyMyPosts,
         });
         store.dispatch({
             type: LOAD_HOLIDAY_REQUEST,
@@ -64,7 +64,7 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
             type:LOAD_MY_POSTS_REQUEST,
             year: parseInt(moment().add(9, 'h').format('YYYY')),
             month: parseInt(moment().add(9, 'h').format('MM')),
-            data: dummyData,
+            data: dummyMyPosts,
         });
         store.dispatch({
             type: LOAD_HOLIDAY_REQUEST,

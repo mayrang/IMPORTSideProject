@@ -4,9 +4,8 @@ import {EllipsisOutlined} from "@ant-design/icons";
 import styled from "styled-components";
 import moment from "moment";
 import {Button, List, Modal} from "antd";
-import { useDispatch, useSelector } from "react-redux";
-import { LOAD_POSTS_REQUEST } from "../reducers/post";
-import { dummyData } from "../utils/dummy"
+import { useSelector } from "react-redux";
+
 import Router, { useRouter } from "next/router";
 
 
@@ -27,8 +26,12 @@ const HeaderWrapper = styled.div`
     padding: 1rem .7rem;
     font-weight: bold;
     box-sizing: border-box;
-    div {
-        font-size: 25px;
+    .yearMonth {
+        font-size: 1.3em;
+    }
+    .changeMonth {
+        font-size: 1em;
+        cursor: pointer;
     }
 `   
 
@@ -48,8 +51,6 @@ const FloatButton = styled(Button)`
     cursor: pointer;
     outline: none;
 `
-
-
 
 
 
@@ -129,28 +130,18 @@ const calendarArray = (year, month, posts, holidays) => {
 
  
 
-const CalendarView = ({posts, holidays}) => {
+const CalendarView = ({posts, holidays, profile}) => {
     const [modalPosts, setModalPosts] = useState([]);
     const [visible, setVisible] = useState(false);
     const router = useRouter();
     const {year, month} = router.query
     const [modalDay, setModalDay] = useState("");
-    const dispatch = useDispatch();
     const {me} = useSelector((state) => state.user)
     const calendarYear = year||parseInt(moment().format('YYYY'));
     const calendarMonth = month||parseInt(moment().format('MM'));
     const checkToday = moment(`${parseInt(calendarYear)}, ${parseInt(calendarMonth)}`, 'YYYYMMDDHHmmss').format("YYYY-MM")
 
 
-    useEffect(() => {
-        dispatch({
-            type: LOAD_POSTS_REQUEST,
-            year: year,
-            month: month,
-            data: dummyData,
-        });
-        
-    }, [calendarYear, calendarMonth])
 
 
     const clickNext = useCallback(() => {
@@ -208,6 +199,11 @@ const CalendarView = ({posts, holidays}) => {
         Router.push('/reservation')
     }, []);
 
+    const clickEdit = useCallback((id) => {
+        router.push(`/edit/${id.toString()}`);
+    }, [])
+
+
     return (
         <>
         <Modal visible={visible} onCancel={cancelModal} title={modalDay + "일"}>
@@ -216,7 +212,7 @@ const CalendarView = ({posts, holidays}) => {
                 itemLayout="horizontal"
                 dataSource={modalPosts}
                 renderItem={(item) => (
-                    <List.Item actions={me.id&&me.Posts.find((it)=>it.id === item.id)&&[<a key={item.id}>수정</a>]}>
+                    <List.Item actions={me.id&&me.Posts.find((it)=>it.id === item.id)&&[<Button key={item.id} onClick={() => clickEdit(item.id)}>수정</Button>,<Button type="primary" key={item.id} danger>삭제</Button>]}>
                         <List.Item.Meta
                             title={item.User.name}
                             description={msToTime(item.startTime) +"~"+ msToTime(item.endTime)}
@@ -229,9 +225,9 @@ const CalendarView = ({posts, holidays}) => {
         </Modal>
         <CalendarWrapper>
             <HeaderWrapper>
-                <Button onClick={clickPrev}><div>{"<"} 이전 달</div></Button>
-                <div>{calendarYear}년 {calendarMonth}월</div>
-                <Button onClick={clickNext}><div>다음 달 {">"}</div></Button>
+                <div className="changeMonth" onClick={clickPrev}>{"<"} 이전 달</div>
+                <div className="yearMonth">{calendarYear}년 {calendarMonth}월</div>
+                <div className="changeMonth" onClick={clickNext}>다음 달 {">"}</div>
 
             </HeaderWrapper>
             <div className="grid dayHeader">
@@ -274,6 +270,7 @@ const CalendarView = ({posts, holidays}) => {
 CalendarView.propTypes = {
     posts: PropTypes.array.isRequired,
     holidays: PropTypes.array.isRequired,
+    profile: PropTypes.bool.isRequired
 }
 
 export default CalendarView;
