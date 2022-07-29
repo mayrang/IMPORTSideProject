@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import PropTypes from "prop-types";
 import {EllipsisOutlined} from "@ant-design/icons";
 import styled from "styled-components";
@@ -130,7 +130,7 @@ const calendarArray = (year, month, posts, holidays) => {
 
  
 
-const CalendarView = ({posts, holidays, profile}) => {
+const CalendarView = ({posts, holidays}) => {
     const [modalPosts, setModalPosts] = useState([]);
     const [visible, setVisible] = useState(false);
     const router = useRouter();
@@ -270,7 +270,6 @@ const CalendarView = ({posts, holidays, profile}) => {
 CalendarView.propTypes = {
     posts: PropTypes.array.isRequired,
     holidays: PropTypes.array.isRequired,
-    profile: PropTypes.bool.isRequired
 }
 
 export default CalendarView;
