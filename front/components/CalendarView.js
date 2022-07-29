@@ -151,7 +151,7 @@ const CalendarView = ({posts, holidays}) => {
         
     }, [calendarYear, calendarMonth])
 
-    
+
     const clickNext = useCallback(() => {
         if(parseInt(month) === 12){
             router.push({
@@ -235,18 +235,18 @@ const CalendarView = ({posts, holidays}) => {
                     {week.map((day, idx) => (
                         <div key={`day${idx}`}>
                             {idx===0||day.holidays?.dateName? 
-                            <div style={{color:"red"}} className="dayDate"><p style={moment().format('YYYY-MM-DD')===(checkToday+"-"+(parseInt(day.day) < 10 ? "0" + day.day : day.day))?{margin: "1px", color:"white", backgroundColor:"red", display: "inline-block", textAlign:"center", padding:".1em"}:{margin: "1px", color:"red", display:"inline-block"}}>{day.day}</p>  {day.holidays?.dateName}</div>
+                            <div style={{color:"red"}} className="dayDate"><p style={moment().format('YYYY-MM-DD')===(checkToday+"-"+(parseInt(day.day) < 10 ? "0" + day.day : day.day))?{margin: "1px", color:"white", backgroundColor:"red", display: "inline-block", textAlign:"center", padding:".1em"}:{margin: "1px", color:"red", display:"inline-block"}}>{day.day}</p> <p style={{display: "inline-block", fontSize: ".3rem", marginBottom: "1px"}}>{day.holidays?.dateName}</p></div>
                             : 
                             <div className="dayDate"><p style={moment().format('YYYY-MM-DD')===(checkToday+"-"+(parseInt(day.day) < 10 ? "0" + day.day : day.day))?{margin: "1px", color:"white", backgroundColor:"black", display: "inline-block", textAlign:"center", padding:".1em"}:{margin: "1px", color:"black", display:"inline-block"}}>{day.day}</p></div>}
-                            {day.posts.length<4 ?
+                            {day.posts.length<3 ?
                             day.posts.map((post) => (
                                 <ScheduleDiv key={post.id} onClick={() => clickModal(day.posts, day.day)}>{post.User.name} {msToTime(post.startTime)} ~ {msToTime(post.endTime)}</ScheduleDiv>
                             )) :(
-                                <>
+                                <div>
                                 <ScheduleDiv  onClick={() => clickModal(day.posts, day.day)}>{day.posts[0].User.name} {msToTime(day.posts[0].startTime)} ~ {msToTime(day.posts[0].endTime)}</ScheduleDiv>
                                 <ScheduleDiv  onClick={() => clickModal(day.posts, day.day)}>{day.posts[1].User.name} {msToTime(day.posts[1].startTime)} ~ {msToTime(day.posts[1].endTime)}</ScheduleDiv>
-                                <EllipsisOutlined style={{width: "100%", marginTop: "2px"}}  onClick={() => clickModal(day.posts, day.day)}/>
-                                </>
+                                <EllipsisOutlined style={{width: "100%"}}  onClick={() => clickModal(day.posts, day.day)}/>
+                                </div>
                             )}
                         </div>
                     ))}

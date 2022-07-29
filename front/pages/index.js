@@ -26,7 +26,7 @@ export const dummyData = [
 
     },
     {
-        day: "2022-07-12",
+        day: "2022-07-14",
         id: 4,
         User: {
             id: 1,
@@ -82,7 +82,7 @@ export const dummyHolidays = [
         datekind: "01",
         dateName: "테스트2",
         isHoliday: "Y",
-        locdate: 20220713,
+        locdate: 20220712,
         seq: 1
     },
     {
