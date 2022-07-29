@@ -138,11 +138,10 @@ const CalendarView = ({posts, holidays}) => {
     const {me} = useSelector((state) => state.user)
     const calendarYear = year||parseInt(moment().format('YYYY'));
     const calendarMonth = month||parseInt(moment().format('MM'));
-    const checkToday = moment(`${year}, ${month}`, 'YYYYMMDDHHmmss').format("YYYY-MM")
+    const checkToday = moment(`${parseInt(calendarYear)}, ${parseInt(calendarMonth)}`, 'YYYYMMDDHHmmss').format("YYYY-MM")
 
 
     useEffect(() => {
-        console.log(calendarYear, calendarMonth)
         dispatch({
             type: LOAD_POSTS_REQUEST,
             year: year,
@@ -152,8 +151,7 @@ const CalendarView = ({posts, holidays}) => {
         
     }, [calendarYear, calendarMonth])
 
-
-
+    
     const clickNext = useCallback(() => {
         if(parseInt(month) === 12){
             router.push({
