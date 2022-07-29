@@ -66,7 +66,47 @@ export const dummyData = [
         startTime: moment().valueOf(),
         endTime: moment().valueOf(),
 
-    }
+    },
+    {
+        day: "2022-07-12",
+        id: 1,
+        User: {
+            id: 1,
+            name: "박건상"
+        },
+        startTime: moment('2022-07-12 18:35').valueOf(),
+        endTime: moment('2022-07-12 19:00').valueOf(),
+    },
+    {
+        day: "2022-07-12",
+        id: 3,
+        User: {
+            id: 1,
+            name: "박건상"
+        },
+        startTime: moment('2022-07-12 19:30').valueOf(),
+        endTime: moment('2022-07-12 20:30').valueOf(),
+    },
+    {
+        day: "2022-07-12",
+        id: 1,
+        User: {
+            id: 1,
+            name: "박건상"
+        },
+        startTime: moment('2022-07-12 20:35').valueOf(),
+        endTime: moment('2022-07-12 21:00').valueOf(),
+    },
+    {
+        day: "2022-07-12",
+        id: 3,
+        User: {
+            id: 1,
+            name: "박건상"
+        },
+        startTime: moment('2022-07-12 16:30').valueOf(),
+        endTime: moment('2022-07-12 17:30').valueOf(),
+    },
 ];
 
 

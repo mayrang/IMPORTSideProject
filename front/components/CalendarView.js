@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import {EllipsisOutlined} from "@ant-design/icons";
 import styled from "styled-components";
 import moment from "moment";
-import {Button, Modal} from "antd";
+import {Button, List, Modal} from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { LOAD_POSTS_REQUEST } from "../reducers/post";
 import { dummyData } from "../pages";
@@ -211,7 +211,19 @@ const CalendarView = ({posts, holidays}) => {
         <>
         <Modal visible={visible} onCancel={cancelModal} title={modalDay + "일"}>
             {modalPosts.length > 0 ?
-            modalPosts.map((post) => <p key={post.id}>{post.User.name} {msToTime(post.startTime)} ~ {msToTime(post.endTime)}</p>) : 
+            <List
+                itemLayout="horizontal"
+                dataSource={modalPosts}
+                renderItem={(item) => (
+                    <List.Item>
+                        <List.Item.Meta
+                            title={item.User.name}
+                            description={msToTime(item.startTime) +"~"+ msToTime(item.endTime)}
+                        />
+                    </List.Item>
+                )}
+            />
+            : 
             <p>예약된 시간이 없습니다.</p>}
         </Modal>
         <CalendarWrapper>
