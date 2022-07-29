@@ -212,7 +212,7 @@ const majorOptions = [
 
 const SignupForm = () => {
     const dispatch = useDispatch();
-    const {singUpLoading, signUpDone} = useSelector((state) => state.user);
+    const {signUpLoading, signUpDone} = useSelector((state) => state.user);
     const router = useRouter();
     useEffect(() => {
         if(signUpDone){
@@ -282,7 +282,7 @@ const SignupForm = () => {
                 <Cascader 
                     options={majorOptions}/>
             </Form.Item>
-            <Button type="primary" htmlType="submit" loading={singUpLoading}>가입하기</Button>
+            <Button type="primary" htmlType="submit" loading={signUpLoading}>가입하기</Button>
         </Form>
     );
 }

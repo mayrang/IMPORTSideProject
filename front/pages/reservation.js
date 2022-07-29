@@ -18,8 +18,10 @@ const Reservation = () => {
     const [loadPosts, setLoadPosts] = useState(false); 
     const [startTime, setStartTime] = useState();
     const [endTime, setEndTime] = useState();
-    const [warning, setWarning] = useState(false);
+    const [timeWarning, setTimeWarning] = useState(false);
+    const [dateWarning, setDateWarning] = useState(false);
     const [current, setCurrent] = useState();
+    const [passDate, setPassDate] = useState(false);
     const [checkDate, setCheckDate] = useState(false)
     const dispatch = useDispatch();
     const router = useRouter();
@@ -54,39 +56,59 @@ const Reservation = () => {
 
     const clickDate = useCallback((value, dateString) => {
         if(value){
-            console.log(parseInt(value.format("YYYY")), parseInt(value.format("MM")))
-            dispatch({
-                type: LOAD_POSTS_REQUEST,
-                year: parseInt(value.format("YYYY")),
-                month: parseInt(value.format("MM")),
-                data: dummyData
-            });
-            setDate(dateString);
-            setCheckDate(true)
-            setLoadPosts(true);
+            const checkValue = value.valueOf() + (1000 * 60 * 60 * 24);
+            if(checkValue < moment().valueOf()){
+                alert("지난 날짜에는 예약을 할 수 없습니다.")
+                setDateWarning(true);
+                setPassDate(true);
+                setCurrent(0);
+                setCheckDate(true);
+                setLoadPosts(false);
+           }else{
+                dispatch({
+                    type: LOAD_POSTS_REQUEST,
+                    year: parseInt(value.format("YYYY")),
+                    month: parseInt(value.format("MM")),
+                    data: dummyData
+                });
+                setDateWarning(false);
+                setDate(dateString);
+                setCheckDate(true)
+                setLoadPosts(true);
+                setPassDate(true)
+                setCurrent(1)
+           }
         }
     }, []);
 
     const clickTime = useCallback((time) => {
         if(monthPosts&&time[1] !== null){
-            setCheckDate(false);
-            console.log(date)
+            setCheckDate(false)
             const day = monthPosts.filter((it) => it.day === date);
             const firstTime = moment(`${date} ${time[0].format("HH")}:${time[0].format("mm")}`).valueOf();
             const secondTime = moment(`${date} ${time[1].format("HH")}:${time[1].format("mm")}`).valueOf();
             const checkFirstTime = day.find((it) => it.startTime < firstTime&&firstTime < it.endTime);
             const checkSecondTime = day.find((it) => it.startTime < secondTime&&secondTime < it.endTime);
-            if(checkFirstTime||checkSecondTime){
-                setWarning(true)
-                alert("다른 사람과 겹치는 시간에는 예약을 할수 없습니다.")
-                
+            const formatTime = moment(time[0].valueOf()).format("HH:mm")
+            const checkToday = moment(`${date} ${formatTime}`, "YYYY-MM-DD HH:mm").valueOf();
+            if(checkToday < moment().valueOf()){
+                alert("지난 시간에는 예약을 할 수 없습니다.");
+                setTimeWarning(true);
             }else{
-                setWarning(false);
-                setStartTime(firstTime);
-                setEndTime(secondTime);
-                setCurrent(2);
-                
+                if(checkFirstTime||checkSecondTime){
+                    setTimeWarning(true)
+                    alert("다른 사람과 겹치는 시간에는 예약을 할 수 없습니다.")
+                    
+                }else{
+   
+                    setTimeWarning(false);
+                    setStartTime(firstTime);
+                    setEndTime(secondTime);
+                    setCurrent(2);
+                    
+                }
             }
+            
             
         }
     }, [monthPosts, date]);
@@ -111,8 +133,8 @@ const Reservation = () => {
     return (
         <AppLayout> 
             <Steps direction="vertical" current={current}>
-                <Steps.Step  title="날짜를 지정해주세요" description={<DatePicker onChange={clickDate}/>}/>
-                <Steps.Step title="Step 2" description={loadPostsDone&&loadPosts? <TimePicker.RangePicker status={warning&&"error"} value={warning||checkDate ? null : [moment(startTime), moment(endTime)]} onOk={clickTime} format={"HH:mm"} /> : "Step 1을 완료해주세요"} />
+                <Steps.Step  title="날짜를 지정해주세요" description={<DatePicker status={dateWarning&&"error"}  value={dateWarning||!passDate? null : moment(date, "YYYY-MM-DD")} onChange={clickDate}/>}/>
+                <Steps.Step title="Step 2" description={loadPostsDone&&loadPosts&&passDate? <TimePicker.RangePicker status={timeWarning&&"error"} value={timeWarning||checkDate ? null : [moment(startTime), moment(endTime)]} onOk={clickTime} format={"HH:mm"} /> : "Step 1을 완료해주세요"} />
             </Steps>
             {current===2&&<Button onClick={clickReservation} loading={addPostLoading}>예약</Button>}
             <Divider />
