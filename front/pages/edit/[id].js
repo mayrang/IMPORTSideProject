@@ -46,7 +46,7 @@ const Edit = () => {
 
     return(
         <AppLayout>
-            <ReservationForm value={singlePost} />
+            <ReservationForm value={singlePost} edit={true} postId={id}/>
         </AppLayout>
 
     );
@@ -56,11 +56,9 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
     const cookie = req ? req.headers.cookie : '';
     console.log(req&&cookieStringToObject(cookie)['jwtToken'])
     
-    console.log(params)
     if(req&&cookieStringToObject(cookie)['jwtToken']){
         store.dispatch({
             type: LOAD_MY_INFO_REQUEST,
-            data: cookieStringToObject(cookie)['jwtToken']
         });
     }
     store.dispatch({

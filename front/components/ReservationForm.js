@@ -4,14 +4,14 @@ import moment from "moment";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { ADD_POST_REQUEST, LOAD_POSTS_REQUEST } from "../reducers/post";
+import { ADD_POST_REQUEST, EDIT_POST_REQUEST, LOAD_POSTS_REQUEST } from "../reducers/post";
 import { dummyData } from "../utils/dummy";
 import PropTypes from "prop-types"
 
 
 
 
-const ReservationForm = ({value}) => {
+const ReservationForm = ({value, edit, postId}) => {
     const [date, setDate] = useState(value?.day);
     const {loadPostsDone, monthPosts, addPostDone, addPostLoading} = useSelector((state) => state.post);
     const [loadPosts, setLoadPosts] = useState(false); 
@@ -89,11 +89,12 @@ const ReservationForm = ({value}) => {
     const clickTime = useCallback((time) => {
         if(monthPosts&&time[0] !== null&&time[1] !== null){
             setCheckDate(false)
+            console.log(postId)
             const day = monthPosts.filter((it) => it.day === date);
             const firstTime = moment(`${date} ${time[0].format("HH")}:${time[0].format("mm")}`).valueOf();
             const secondTime = moment(`${date} ${time[1].format("HH")}:${time[1].format("mm")}`).valueOf();
-            const checkFirstTime = day.find((it) => it.startTime > firstTime&&firstTime < it.endTime);
-            const checkSecondTime = day.find((it) => it.startTime > secondTime&&secondTime < it.endTime);
+            const checkFirstTime = day.find((it) => it.startTime < firstTime&&firstTime < it.endTime&&it.id!==parseInt(postId));
+            const checkSecondTime = day.find((it) => it.startTime < secondTime&&secondTime < it.endTime&&it.id!==parseInt(postId));
             const formatTime = moment(time[0].valueOf()).format("HH:mm")
             const checkToday = moment(`${date} ${formatTime}`, "YYYY-MM-DD HH:mm").valueOf();
             if(checkToday < moment().valueOf()){
@@ -121,24 +122,42 @@ const ReservationForm = ({value}) => {
 
     const clickReservation = useCallback(() => {
         if(startTime&&endTime&&date){
-            dispatch({
-                type: ADD_POST_REQUEST,
-                data: {
-                    day: date,
-                    id: 4,
-                    User: {
-                        id: 1,
-                        name: "박건상"
-                    },
-                    startTime: startTime,
-                    endTime: endTime,
-                }
-            });
+            if(edit){
+                dispatch({
+                    type: EDIT_POST_REQUEST,
+                    postId: postId,
+                    data: {
+                        day: date,
+                        id: 4,
+                        User: {
+                            id: 1,
+                            name: "박건상"
+                        },
+                        startTime: startTime,
+                        endTime: endTime,
+                    }
+               })
+            }else{
+                dispatch({
+                    type: ADD_POST_REQUEST,
+                    data: {
+                        day: date,
+                        id: 4,
+                        User: {
+                            id: 1,
+                            name: "박건상"
+                        },
+                        startTime: startTime,
+                        endTime: endTime,
+                    }
+                });
+            }
+            
             router.replace({
                 pathname: "/",
                 query: {
-                    year: date.slice(0, 4),
-                    month: date.slice(5, 7)
+                    year: parseInt(date.slice(0, 4)),
+                    month: parseInt(date.slice(5, 7))
                 }
             });
         }else{
@@ -162,7 +181,9 @@ const ReservationForm = ({value}) => {
 };
 
 ReservationForm.propTypes = {
-    value: PropTypes.object.isRequired
+    value: PropTypes.object.isRequired,
+    edit: PropTypes.bool.isRequired,
+    postId: PropTypes.string.isRequired
 }
 
 export default ReservationForm

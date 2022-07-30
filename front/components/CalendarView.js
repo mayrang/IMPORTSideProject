@@ -1,12 +1,13 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import {EllipsisOutlined} from "@ant-design/icons";
 import styled from "styled-components";
 import moment from "moment";
 import {Button, List, Modal} from "antd";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import Router, { useRouter } from "next/router";
+import { REMOVE_POST_REQUEST } from "../reducers/post";
 
 
 
@@ -103,9 +104,11 @@ const calendarArray = (year, month, posts, holidays) => {
                                         + (month < 10 ? "0" + (month) : month)
                                         + (count < 10 ? "0" + count : count);
                 const findHoliday = holidays.find((it) => it.locdate.toString() === yearMonthDayHolidays)
+                console.log(yearMonthDayHolidays, yearMonthDayPosts)
                 let findPosts = posts.filter((it) => it.day === yearMonthDayPosts);
                 findPosts.sort((a, b) => a.startTime - b.startTime);
                 if(findPosts){
+                    console.log(findPosts)
                     if(findHoliday){
                         week.push({day: count.toString(), posts: findPosts, holidays: findHoliday});
                     }else{
@@ -136,12 +139,26 @@ const CalendarView = ({posts, holidays}) => {
     const router = useRouter();
     const {year, month} = router.query
     const [modalDay, setModalDay] = useState("");
-    const {me} = useSelector((state) => state.user)
+    const {me} = useSelector((state) => state.user);
+    const {removePostLoading, removePostDone} = useSelector((state) => state.post);
     const calendarYear = year||parseInt(moment().format('YYYY'));
     const calendarMonth = month||parseInt(moment().format('MM'));
     const checkToday = moment(`${parseInt(calendarYear)}, ${parseInt(calendarMonth)}`, 'YYYYMMDDHHmmss').format("YYYY-MM")
+    const dispatch = useDispatch();
 
 
+    useEffect(() => {
+        if(removePostDone){
+            setVisible(false)
+            router.replace({
+                pathname: "/",
+                query: {
+                    year: calendarYear,
+                    month: calendarMonth
+                }
+            })
+        }
+    }, [removePostDone])
 
 
     const clickNext = useCallback(() => {
@@ -203,6 +220,19 @@ const CalendarView = ({posts, holidays}) => {
         router.push(`/edit/${id.toString()}`);
     }, [])
 
+    const clickRemove = useCallback((id) => {
+        if(me.id&&me){
+            const checkPost = me.Posts.find((it) => it.id === parseInt(id))
+            if(checkPost){
+                dispatch({
+                    type: REMOVE_POST_REQUEST,
+                    postId: id
+                })
+            }else{
+                alert('삭제권한이 없습니다.')
+            }      
+        }
+    }, [me.id&&me])
 
     return (
         <>
@@ -212,7 +242,7 @@ const CalendarView = ({posts, holidays}) => {
                 itemLayout="horizontal"
                 dataSource={modalPosts}
                 renderItem={(item) => (
-                    <List.Item actions={me.id&&me.Posts.find((it)=>it.id === item.id)&&[<Button key={item.id} onClick={() => clickEdit(item.id)}>수정</Button>,<Button type="primary" key={item.id} danger>삭제</Button>]}>
+                    <List.Item actions={me.id&&me.Posts.find((it)=>it.id === item.id)&&[<Button key={item.id} onClick={() => clickEdit(item.id)}>수정</Button>,<Button loading={removePostLoading} onClick={() => clickRemove(item.id)} type="primary" key={item.id} danger>삭제</Button>]}>
                         <List.Item.Meta
                             title={item.User.name}
                             description={msToTime(item.startTime) +"~"+ msToTime(item.endTime)}

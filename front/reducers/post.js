@@ -21,6 +21,12 @@ const initialState = {
     loadPostLoading: false,
     loadPostDone: false,
     loadPostError: null, 
+    editPostLoading: false,
+    editPostDone: false,
+    editPostError: null,
+    removePostLoading: false,
+    removePostDone: false,
+    removePostError: null,
 };
 
 
@@ -40,6 +46,12 @@ export const LOAD_MY_POSTS_FAILURE = "LOAD_MY_POSTS_FAILURE";
 export const LOAD_POST_REQUEST = "LOAD_POST_REQUEST";
 export const LOAD_POST_SUCCESS = "LOAD_POST_SUCCESS";
 export const LOAD_POST_FAILURE = "LOAD_POST_FAILURE";
+export const EDIT_POST_REQUEST = "EDIT_POST_REQUEST";
+export const EDIT_POST_SUCCESS = "EDIT_POST_SUCCESS";
+export const EDIT_POST_FAILURE = "EDIT_POST_FAILURE";
+export const REMOVE_POST_REQUEST = "REMOVE_POST_REQUEST";
+export const REMOVE_POST_SUCCESS = "REMOVE_POST_SUCCESS";
+export const REMOVE_POST_FAILURE = "REMOVE_POST_FAILURE"
 
 
 
@@ -115,6 +127,32 @@ const reducer = (state=initialState, action) => {
             case LOAD_POST_FAILURE:
                 draft.loadPostError = action.error;
                 draft.loadPostLoading = false;
+                break;
+            case EDIT_POST_REQUEST:
+                draft.editPostLoading = true;
+                draft.editPostDone = false;
+                draft.editPostError = null;
+                break;
+            case EDIT_POST_SUCCESS:
+                draft.editPostLoading = false;
+                draft.editPostDone = true;
+                break;
+            case EDIT_POST_FAILURE:
+                draft.editPostLoading = false;
+                draft.editPostError = action.error;
+                break; 
+            case REMOVE_POST_REQUEST:
+                draft.removePostLoading = true;
+                draft.removePostDone = false;
+                draft.removePostError = null;
+                break;
+            case REMOVE_POST_SUCCESS:
+                draft.removePostLoading = false;
+                draft.removePostDone = true;
+                break;
+            case REMOVE_POST_FAILURE:
+                draft.removePostLoading = false;
+                draft.removePostError = action.error;
                 break;
             default:
                 break;

@@ -18,7 +18,7 @@ const Reservation = () => {
         }
     }, [me&&me.id]);
     return (
-        <ReservationForm value={{}}/>
+        <ReservationForm edit={false}/>
     )
 };
 
@@ -31,7 +31,6 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
     if(req&&cookieStringToObject(cookie)['jwtToken']){
         store.dispatch({
             type: LOAD_MY_INFO_REQUEST,
-            data: cookieStringToObject(cookie)['jwtToken']
         });
     }
     

@@ -27,10 +27,8 @@ const Home = () => {
 
 export const getServerSideProps = wrapper.getServerSideProps((store) => async ({query, req}) => {
     const cookie = req ? req.headers.cookie : '';
-    console.log(req&&cookieStringToObject(cookie)['jwtToken'])
     
     if(query.year&&query.month){
-        console.log("match" , query.year.match(/^[0-9]+$/))
         if(query.year.match(/^[0-9]+$/) === null||query.month.match(/^[0-9]+$/) === null||parseInt(query.month)<0||parseInt(query.month)>13){
             return {
                 redirect: {
@@ -68,7 +66,6 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
     if(req&&cookieStringToObject(cookie)['jwtToken']){
         store.dispatch({
             type: LOAD_MY_INFO_REQUEST,
-            data: cookieStringToObject(cookie)['jwtToken']
         });
     }
     
