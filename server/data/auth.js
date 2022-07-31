@@ -22,6 +22,8 @@ export async function createUser(member){
         .then((result) => result[0].insertId);//TODO: 리턴값 확인, 변경필요
 }
 
+
+
 // export async function revisePassword(userId, newpassword){
 //     return db.execute(
 //         'UPDATE user SET password=? WHERE id=?', [newpassword, userId]
