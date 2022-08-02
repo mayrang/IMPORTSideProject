@@ -8,7 +8,8 @@ const pool = mysql.createPool({
     user: config.db.user,
     database: config.db.database,
     password: config.db.password,
-    port: 3306
+    port: 3306,
+    dateStrings:'date'
 });
 
 export const db = pool.promise();

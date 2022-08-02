@@ -20,6 +20,7 @@ export const isAuth = async (req, res, next) => {
             return res.status(401).json(AUTH_ERROR);
         }
 
+        req.memberId = member.id;
         res.status(200).json({ token: token, memberId:member.id })//필요한 리턴값
 
         next();

@@ -1,5 +1,7 @@
 import { db } from '../db/database.js';
 
+const getQuery = `select member.id as memberId, member.name, reservation.id as reservationId, 
+rsvDate, startTime, endTime from member LEFT JOIN reservation ON member.id = reservation.rsvMemberId`;
 
 export async function create(rsvDate, startTime, endTime, rsvMemberId){
     return db
@@ -16,7 +18,45 @@ export async function create(rsvDate, startTime, endTime, rsvMemberId){
 
 export async function getMonthly(startDate, endDate){
     return db
-        .execute(`select * from reservation where rsvDate >= ? AND rsvDate < ?`, 
+        .execute(`${getQuery} WHERE rsvDate >= ? AND rsvDate < ?`, 
         [startDate, endDate])
         .then((result) => result[0]);
+}
+
+export async function getByMemberId(memberId){
+    return db
+        .execute(`${getQuery} WHERE rsvMemberId = ?`, 
+        [memberId])
+        .then((result) => result[0]);
+}
+
+
+export async function getById(memberId, reservationId){
+    return db
+        .execute(`${getQuery} WHERE rsvMemberId = ? AND reservation.id = ?`, 
+        [memberId, reservationId])
+        .then((result) => result[0][0]);
+}
+
+export async function cancel(rsvMemberId, rsvId){
+    return db
+        .execute(`DELETE FROM reservation WHERE rsvMemberId = ? and id = ?;`, 
+        [rsvMemberId, rsvId])
+        .then((result) => result[0].affectedRows);
+}
+
+export async function update(reservationId, rsvDate, startTime, endTime){
+    return db
+        .execute(`UPDATE reservation
+        SET rsvDate = ?, startTime = ?, endTime = ?
+        WHERE id = ?`, 
+        [rsvDate, startTime, endTime, reservationId])
+        .then((result) => result[0].affectedRows);
+}
+
+export async function getByReservationId(reservationId){
+    return db
+        .execute(`${getQuery} WHERE reservation.id = ?`, 
+        [reservationId])
+        .then((result) => result[0][0]);
 }
