@@ -1,5 +1,4 @@
 import produce from 'immer';
-import moment from "moment";
 const initialState = {
     me: {},
     signUpLoading: false,

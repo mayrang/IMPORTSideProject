@@ -46,7 +46,6 @@ const ReservationForm = ({value, edit, postId}) => {
 
     useEffect(() => {
         if(addPostDone){
-            console.log(parseInt(date.slice(0, 4)).toString(), parseInt(date.slice(5, 7)).toString())
             router.replace({
                 pathname: '/',
                 query: {
@@ -89,7 +88,6 @@ const ReservationForm = ({value, edit, postId}) => {
     const clickTime = useCallback((time) => {
         if(monthPosts&&time[0] !== null&&time[1] !== null){
             setCheckDate(false)
-            console.log(postId)
             const day = monthPosts.filter((it) => it.day === date);
             const firstTime = moment(`${date} ${time[0].format("HH")}:${time[0].format("mm")}`).valueOf();
             const secondTime = moment(`${date} ${time[1].format("HH")}:${time[1].format("mm")}`).valueOf();
@@ -108,7 +106,6 @@ const ReservationForm = ({value, edit, postId}) => {
                 alert("시간은 역전될수 없습니다.");
                 setTimeWarning(true);
             }else{
-                console.log(456)
                 setTimeWarning(false);
                 setStartTime(firstTime);
                 setEndTime(secondTime);

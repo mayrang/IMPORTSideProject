@@ -11,7 +11,7 @@ function* watchLoadPosts () {
 
 function* loadPosts(action) {
     try{
-        //const result = yield call(loadPostsAPI, action.year, action.month);
+        //const result = yield call(loadPostsAPI, action.year, action.month, action.userId);
         yield put({
             type:LOAD_POSTS_SUCCESS,
             data: action.data
@@ -25,8 +25,8 @@ function* loadPosts(action) {
     }
 }
 
-function loadPostsAPI(year, month){
-    return axios.get(`/reservation?year=${year.toString()}month=${month.toString()}`);
+function loadPostsAPI(year, month, userId){
+    return axios.get(`/reservation?year=${year.toString()}&month=${month.toString()}&memberId=${userId.toString()}`);
 }
 
 
@@ -104,8 +104,8 @@ function* loadMyPosts(action){
     }
 }
 
-function loadMyPostsAPI(year, month, token){
-    return axios.get(`/test?year=${year}&month=${month}`, {}, {
+function loadMyPostsAPI(token){
+    return axios.get(`/test`, {}, {
         headers: {
             'Authorization': `Bearer ${token}`
         }});

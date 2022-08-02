@@ -2,6 +2,7 @@ import produce from 'immer';
 // import moment from 'moment';
 
 const initialState = {
+    profilePosts: [],
     holidays: [],
     monthPosts : [],
     singlePost : {},
@@ -108,7 +109,7 @@ const reducer = (state=initialState, action) => {
             case LOAD_MY_POSTS_SUCCESS:
                 draft.loadMyPostsLoading = false;
                 draft.loadMyPostsDone = true;
-                draft.monthPosts = action.data;
+                draft.profilePosts = action.data;
                 break;
             case LOAD_MY_POSTS_FAILURE:
                 draft.loadMyPostsLoading = false;

@@ -5,7 +5,7 @@ import styled from "styled-components";
 import moment from "moment";
 import {Button, List, Modal} from "antd";
 import { useDispatch, useSelector } from "react-redux";
-
+import { msToTime } from "../utils/timeFormat";
 import Router, { useRouter } from "next/router";
 import { REMOVE_POST_REQUEST } from "../reducers/post";
 
@@ -71,17 +71,6 @@ const ScheduleDiv = styled.div`
     white-space:nowrap;
 `
 
-function msToTime(duration) {
-    const localeDuration = duration + (1000 * 60 * 60 * 9)
-    let second = Math.floor(localeDuration/ 1000);
-    let minute = Math.floor(second / 60);
-    let hour = Math.floor(minute /60) ;
-
-    second = second % 60;
-    minute = minute % 60;
-    hour = hour % 24
-    return `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`
-  }
 
 
 const calendarArray = (year, month, posts, holidays) => {
@@ -104,11 +93,9 @@ const calendarArray = (year, month, posts, holidays) => {
                                         + (month < 10 ? "0" + (month) : month)
                                         + (count < 10 ? "0" + count : count);
                 const findHoliday = holidays.find((it) => it.locdate.toString() === yearMonthDayHolidays)
-                console.log(yearMonthDayHolidays, yearMonthDayPosts)
                 let findPosts = posts.filter((it) => it.day === yearMonthDayPosts);
                 findPosts.sort((a, b) => a.startTime - b.startTime);
                 if(findPosts){
-                    console.log(findPosts)
                     if(findHoliday){
                         week.push({day: count.toString(), posts: findPosts, holidays: findHoliday});
                     }else{
@@ -127,7 +114,6 @@ const calendarArray = (year, month, posts, holidays) => {
         }
         newMonth.push(week);
     }
-    console.log(newMonth)
     return newMonth;
 }
 
@@ -171,7 +157,6 @@ const CalendarView = ({posts, holidays}) => {
                 }
             })
         }else{
-            console.log(123)
             router.push({
                 pathname: '/',
                 query: {

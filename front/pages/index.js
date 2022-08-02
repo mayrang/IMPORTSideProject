@@ -27,7 +27,8 @@ const Home = () => {
 
 export const getServerSideProps = wrapper.getServerSideProps((store) => async ({query, req}) => {
     const cookie = req ? req.headers.cookie : '';
-    
+    const user = store.getState().user;
+    console.log("getState()", user.me?.id)
     if(query.year&&query.month){
         if(query.year.match(/^[0-9]+$/) === null||query.month.match(/^[0-9]+$/) === null||parseInt(query.month)<0||parseInt(query.month)>13){
             return {
@@ -41,6 +42,7 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
             type: LOAD_POSTS_REQUEST,
             year: parseInt(query.year),
             month: parseInt(query.month),
+            userId: user.me.id ? user.me.id : 0,
             data: dummyData,
         });
         store.dispatch({
@@ -54,6 +56,7 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
             type: LOAD_POSTS_REQUEST,
             year: parseInt(moment().add(9, 'h').format('YYYY')),
             month: parseInt(moment().add(9, 'h').format('MM')),
+            userId: user.me.id ? user.me.id : 0,
             data: dummyData,
         });
         store.dispatch({

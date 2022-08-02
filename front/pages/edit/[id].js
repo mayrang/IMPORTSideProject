@@ -29,7 +29,6 @@ const Edit = () => {
             const checkPost = me.Posts.find((it) => it.id === parseInt(id));
             if(!checkPost){
             alert("수정권한이 없습니다.")
-            console.log(123)
             router.replace('/')
             }
         }
@@ -38,9 +37,6 @@ const Edit = () => {
        
     }, [me&&me.id, loadPostError]);
 
-    useEffect(() => {
-        console.log(singlePost)
-    }, [singlePost])
 
 
 

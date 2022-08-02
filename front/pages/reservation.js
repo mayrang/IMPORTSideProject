@@ -11,7 +11,6 @@ const Reservation = () => {
     const {me} = useSelector((state) => state.user)
     const router = useRouter();
     useEffect(() => {
-        console.log(!me, !me.id)
         if(!(me&&me.id)){
             alert("로그인한 사용자만 글을 작성할수있습니다.");
             router.replace("/login");

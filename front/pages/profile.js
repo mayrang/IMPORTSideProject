@@ -1,78 +1,91 @@
-import moment from "moment";
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { END } from "redux-saga";
-import { dummyData, dummyHolidays, dummyMyInfo, dummyMyPosts } from "../utils/dummy";
+import {dummyMyPosts } from "../utils/dummy";
 import AppLayout from "../components/AppLayout";
-import CalendarView from "../components/CalendarView";
-import { LOAD_HOLIDAY_REQUEST, LOAD_MY_POSTS_REQUEST } from "../reducers/post";
+import {LOAD_MY_POSTS_REQUEST, REMOVE_POST_REQUEST } from "../reducers/post";
 import { LOAD_MY_INFO_REQUEST } from "../reducers/user";
 import { cookieStringToObject } from "../utils/cookieString";
 import wrapper from "../store/configureStore";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
+import { Button, Card, Collapse, Typography } from "antd";
+import { msToTime } from "../utils/timeFormat";
+
+
+
+const makeArray = (posts) => {
+    const copyPosts = [...posts]
+    const sortedPosts = copyPosts.sort((a, b) => a.startTime - b.startTime);
+    const postArray = [];
+    for(const post of sortedPosts){
+        const checkPost = postArray.find((it) => it.day === post.day);
+        if(checkPost){
+            postArray.find((it) => it.day === post.day).posts.push(post)
+        }else{
+            postArray.push({day: post.day, posts:[post]})
+        }
+    }
+    return postArray;
+
+}
 
 
 const Profile = () => {
     const {me} = useSelector((state) => state.user);
     const router = useRouter();
-    const {monthPosts, holidays} = useSelector((state) => state.post);
+    const {profilePosts, removePostLoading} = useSelector((state) => state.post);
+    const dispatch = useDispatch();
     useEffect(() => {
         if(!me&&!me.id){
             alert("로그인한 사용자만 접속 가능합니다.")
             router.replace("/");
         }
     }, [me&&me.id]);
-    useEffect(() => {
-        console.log(monthPosts, holidays)
-    }, [monthPosts, holidays])
+
+
+    const clickEdit = useCallback((id) => {
+        router.push(`/edit/${id.toString()}`);
+    }, []);
+
+    const clickRemove = useCallback((id) => {
+        if(me.id&&me){
+            const checkPost = me.Posts.find((it) => it.id === parseInt(id))
+            if(checkPost){
+                dispatch({
+                    type: REMOVE_POST_REQUEST,
+                    postId: id
+                })
+            }else{
+                alert('삭제권한이 없습니다.')
+            }      
+        }
+    }, [me.id&&me])
 
     return (
         <AppLayout>
-            <CalendarView  posts={monthPosts} holidays={holidays}/>
+            <Typography.Title style={{margin: "2rem"}} level={2}>내 예약 보기</Typography.Title>
+            <Collapse defaultActiveKey={['0']}>
+                {makeArray(profilePosts).map((day, idx) => (
+                    <Collapse.Panel header={day.day} key={idx.toString()}>
+                        {day.posts.map((item) => (
+                            <Card key={item.id}>{msToTime(item.startTime) + "~" + msToTime(item.endTime)}{item.endtime}     <Button  onClick={() => clickEdit(item.id)}>수정</Button>  <Button loading={removePostLoading} onClick={() => clickRemove(item.id)} type="primary" danger>삭제</Button></Card>
+                        ))}
+                    </Collapse.Panel>      
+                ))}
+            </Collapse>
         </AppLayout>
     )
 };
 
-export const getServerSideProps = wrapper.getServerSideProps((store) => async ({query, req}) => {
+export const getServerSideProps = wrapper.getServerSideProps((store) => async ({req}) => {
     const cookie = req ? req.headers.cookie : '';
     console.log(req&&cookieStringToObject(cookie)['jwtToken'])
     
-    if(query.year&&query.month){
-        console.log("match" , query.year.match(/^[0-9]+$/))
-        if(query.year.match(/^[0-9]+$/) === null||query.month.match(/^[0-9]+$/) === null||parseInt(query.month)<0||parseInt(query.month)>13){
-            return {
-                redirect: {
-                    permanent: false,
-                    destination: "/",
-                }
-            }
-        }
-        store.dispatch({
-            type: LOAD_MY_POSTS_REQUEST,
-            year: parseInt(query.year),
-            month: parseInt(query.month),
-            data: dummyMyPosts,
-        });
-        store.dispatch({
-            type: LOAD_HOLIDAY_REQUEST,
-            year: parseInt(query.year),
-            month: parseInt(query.month),
-            data: dummyHolidays,
-        });
-    }else{
-        store.dispatch({
-            type:LOAD_MY_POSTS_REQUEST,
-            year: parseInt(moment().add(9, 'h').format('YYYY')),
-            month: parseInt(moment().add(9, 'h').format('MM')),
-            data: dummyMyPosts,
-        });
-        store.dispatch({
-            type: LOAD_HOLIDAY_REQUEST,
-            year: parseInt(moment().add(9, 'h').format('YYYY')),
-            month: parseInt(moment().add(9, 'h').format('MM')),
-            data: dummyHolidays,
-        });
-    }
+    store.dispatch({
+        type: LOAD_MY_POSTS_REQUEST,
+        data: dummyMyPosts,
+    });
+       
     if(req&&cookieStringToObject(cookie)['jwtToken']){
         store.dispatch({
             type: LOAD_MY_INFO_REQUEST,
