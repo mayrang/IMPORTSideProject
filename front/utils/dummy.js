@@ -7,7 +7,7 @@ export const dummyData = [
    
     {
         day: "2022-07-12",
-        id: 2,
+        reservationId: 2,
         memberId: 3,
         name: "유상우",
         startTime: moment('2022-07-12 13:30').valueOf(),
@@ -16,7 +16,7 @@ export const dummyData = [
     },
     {
         day: "2022-07-14",
-        id: 4,
+        reservationId: 4,
         memberId: 3,
         name: "유상우",
         startTime: moment('2022-07-12 19:30').valueOf(),
@@ -25,7 +25,7 @@ export const dummyData = [
     },
     {
         day: "2022-07-12",
-        id: 1,
+        reservationId: 1,
         memberId: 3,
         name: "유상우",
         startTime: moment('2022-07-12 10:35').valueOf(),
@@ -33,7 +33,7 @@ export const dummyData = [
     },
     {
         day: "2022-07-12",
-        id: 3,
+        reservationId: 3,
         memberId: 2,
         name: "김현겸",
         startTime: moment('2022-07-12 16:30').valueOf(),
@@ -41,7 +41,7 @@ export const dummyData = [
     },
     {
         day: "2022-07-31",
-        id: 5,
+        reservationId: 5,
         memberId: 1,
         name: "박건상",
         startTime: moment("2022-07-31 19:30").valueOf(),
@@ -50,7 +50,7 @@ export const dummyData = [
     },
     {
         day: "2022-07-12",
-        id: 6,
+        reservationId: 6,
         memberId: 1,
         name: "박건상",
         startTime: moment('2022-07-12 18:35').valueOf(),
@@ -58,7 +58,7 @@ export const dummyData = [
     },
     {
         day: "2022-07-12",
-        id: 7,
+        reservationId: 7,
         memberId: 1,
         name: "박건상",
         startTime: moment('2022-07-12 19:30').valueOf(),
@@ -66,7 +66,7 @@ export const dummyData = [
     },
     {
         day: "2022-07-12",
-        id: 8,
+        reservationId: 8,
         memberId: 3,
         name: "유상우",
         startTime: moment('2022-07-12 20:35').valueOf(),
@@ -74,7 +74,7 @@ export const dummyData = [
     },
     {
         day: "2022-07-12",
-        id: 9,
+        reservationId: 9,
         memberId: 3,
         name: "유상우",
         startTime: moment('2022-07-12 16:30').valueOf(),
@@ -121,7 +121,7 @@ export const dummyMyInfo = {
     Posts: [
         {
             day: "2022-07-31",
-            id: 5,
+            reservationId: 5,
             memberId: 1,
             name: "박건상",
             startTime: moment("2022-07-31 19:30").valueOf(),
@@ -130,7 +130,7 @@ export const dummyMyInfo = {
         },
         {
             day: "2022-07-12",
-            id: 6,
+            reservationId: 6,
             memberId: 1,
             name: "박건상",
             startTime: moment('2022-07-12 18:35').valueOf(),
@@ -138,7 +138,7 @@ export const dummyMyInfo = {
         },
         {
             day: "2022-07-12",
-            id: 7,
+            reservationId: 7,
             memberId: 1,
             name: "박건상",
             startTime: moment('2022-07-12 19:30').valueOf(),
@@ -151,7 +151,7 @@ export const dummyMyInfo = {
 export const dummyMyPosts = [
     {
         day: "2022-07-31",
-        id: 5,
+        reservationId: 5,
         memberId: 1,
         name: "박건상",
         startTime: moment("2022-07-31 19:30").valueOf(),
@@ -160,7 +160,7 @@ export const dummyMyPosts = [
     },
     {
         day: "2022-07-12",
-        id: 6,
+        reservationId: 6,
         memberId: 1,
             name: "박건상",
         startTime: moment('2022-07-12 18:35').valueOf(),
@@ -168,7 +168,7 @@ export const dummyMyPosts = [
     },
     {
         day: "2022-07-12",
-        id: 7,
+        reservationId: 7,
         memberId: 1,
         name: "박건상",
         startTime: moment('2022-07-12 19:30').valueOf(),
@@ -178,10 +178,10 @@ export const dummyMyPosts = [
 
 export const findSinglePost = (id) => {
     
-    const findPost = dummyMyInfo.Posts.find((it) => it.id === parseInt(id));
+    const findPost = dummyMyInfo.Posts.find((it) => it.reservationId === parseInt(id));
     if(findPost){
-        console.log(dummyData.find((it) => it.id == parseInt(id)))
-        return dummyData.find((it) => it.id == parseInt(id));
+        console.log(dummyData.find((it) => it.reservationId == parseInt(id)))
+        return dummyData.find((it) => it.reservationId == parseInt(id));
     }else{
         return {};
     }

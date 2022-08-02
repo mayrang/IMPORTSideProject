@@ -20,7 +20,7 @@ const Edit = () => {
             alert("로그인을 해주세요")
             router.replace("/login");
         }else{
-            const checkPost = me.Posts.find((it) => it.id === parseInt(id));
+            const checkPost = me.Posts.find((it) => it.reservationId === parseInt(id));
             
             console.log(checkPost)
             if(!checkPost){
@@ -36,7 +36,7 @@ const Edit = () => {
 
     return(
         <AppLayout>
-            {post&&<ReservationForm value={post} edit={true} postId={id}/>}
+            {post&&<ReservationForm value={post} edit={true} reservationId={id}/>}
         </AppLayout>
 
     );

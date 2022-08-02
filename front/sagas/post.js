@@ -121,8 +121,8 @@ function* watchEditPost(){
 function* editPost(action){
     try{
         //const token = getCookie('jwtToken')
-//        const result = yield call(editPostAPI, action.data, action.postId, token);
-        console.log(action.data, action.postId)
+//        const result = yield call(editPostAPI, action.data, action.reservationId, token);
+        console.log(action.data, action.reservationId)
         yield put({
             type: EDIT_POST_SUCCESS,
             data: action.data
@@ -136,8 +136,8 @@ function* editPost(action){
     }
 }
 
-function editPostAPI(data, postId, token){
-    return axios.put(`/reservation/edit/${postId}`, data, {
+function editPostAPI(data, reservationId, token){
+    return axios.put(`/reservation/edit/${reservationId}`, data, {
         headers: {
             'Authorization': `Bearer ${token}`
         }})
@@ -151,7 +151,7 @@ function* watchRemovePost(){
 function* removePost(action){
     try{
         //const token = getCookie('jwtToken')
-        //const result = yield call(removePostAPI, action.postId, token);
+        //const result = yield call(removePostAPI, action.reservationId, token);
         yield put({
             type: REMOVE_POST_SUCCESS,
         })
@@ -164,8 +164,8 @@ function* removePost(action){
     }
 }
 
-function removePostAPI(postId, token){
-    return axios.delete(`/reservation/${postId.toString()}`, {}, {
+function removePostAPI(reservationId, token){
+    return axios.delete(`/reservation/${reservationId.toString()}`, {}, {
         headers: {
             'Authorization': `Bearer ${token}`
         }})

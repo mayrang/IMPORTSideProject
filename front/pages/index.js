@@ -28,7 +28,6 @@ const Home = () => {
 export const getServerSideProps = wrapper.getServerSideProps((store) => async ({query, req}) => {
     const cookie = req ? req.headers.cookie : '';
     const user = store.getState().user;
-    console.log("getState()", user.me?.id)
     if(query.year&&query.month){
         if(query.year.match(/^[0-9]+$/) === null||query.month.match(/^[0-9]+$/) === null||parseInt(query.month)<0||parseInt(query.month)>13){
             return {

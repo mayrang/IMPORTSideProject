@@ -206,7 +206,7 @@ const CalendarView = ({posts, holidays}) => {
             alert("로그인을 해주세요")
             router.replace("/login");
         }else{
-            const checkPost = me.Posts.find((it) => it.id === parseInt(id));
+            const checkPost = me.Posts.find((it) => it.reservationId === parseInt(id));
             
             console.log(checkPost)
             if(!checkPost){
@@ -222,11 +222,11 @@ const CalendarView = ({posts, holidays}) => {
 
     const clickRemove = useCallback((id) => {
         if(me.id&&me){
-            const checkPost = me.Posts.find((it) => it.id === parseInt(id))
+            const checkPost = me.Posts.find((it) => it.reservationId === parseInt(id))
             if(checkPost){
                 dispatch({
                     type: REMOVE_POST_REQUEST,
-                    postId: id
+                    reservationId: id
                 })
             }else{
                 alert('삭제권한이 없습니다.')
@@ -242,7 +242,7 @@ const CalendarView = ({posts, holidays}) => {
                 itemLayout="horizontal"
                 dataSource={modalPosts}
                 renderItem={(item) => (
-                    <List.Item actions={me.id&&me.Posts.find((it)=>it.id === item.id)&&[<Button key={item.id} onClick={() => clickEdit(item.id)}>수정</Button>,<Button loading={removePostLoading} onClick={() => clickRemove(item.id)} type="primary" key={item.id} danger>삭제</Button>]}>
+                    <List.Item actions={me.id&&me.Posts.find((it)=>it.reservationId === item.reservationId)&&[<Button key={item.reservationId} onClick={() => clickEdit(item.reservationId)}>수정</Button>,<Button loading={removePostLoading} onClick={() => clickRemove(item.reservationId)} type="primary" key={item.reservationId} danger>삭제</Button>]}>
                         <List.Item.Meta
                             title={item.name}
                             description={msToTime(item.startTime) +"~"+ msToTime(item.endTime)}
@@ -279,7 +279,7 @@ const CalendarView = ({posts, holidays}) => {
                             <div className="dayDate"><p style={moment().format('YYYY-MM-DD')===(checkToday+"-"+(parseInt(day.day) < 10 ? "0" + day.day : day.day))?{margin: "1px", color:"white", backgroundColor:"black", display: "inline-block", textAlign:"center", padding:".1em"}:{margin: "1px", color:"black", display:"inline-block"}}>{day.day}</p></div>}
                             {day.posts.length<3 ?
                             day.posts.map((post) => (
-                                <ScheduleDiv key={post.id} onClick={() => clickModal(day.posts, day.day)}>{post.name} {msToTime(post.startTime)} ~ {msToTime(post.endTime)}</ScheduleDiv>
+                                <ScheduleDiv key={post.reservationId} onClick={() => clickModal(day.posts, day.day)}>{post.name} {msToTime(post.startTime)} ~ {msToTime(post.endTime)}</ScheduleDiv>
                             )) :(
                                 <div>
                                 <ScheduleDiv  onClick={() => clickModal(day.posts, day.day)}>{day.posts[0].name} {msToTime(day.posts[0].startTime)} ~ {msToTime(day.posts[0].endTime)}</ScheduleDiv>

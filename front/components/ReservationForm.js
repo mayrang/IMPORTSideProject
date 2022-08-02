@@ -11,7 +11,7 @@ import PropTypes from "prop-types"
 
 
 
-const ReservationForm = ({value, edit, postId}) => {
+const ReservationForm = ({value, edit, reservationId}) => {
     const [date, setDate] = useState(value?.day);
     const {loadPostsDone, monthPosts, addPostDone, addPostLoading} = useSelector((state) => state.post);
     const [loadPosts, setLoadPosts] = useState(false); 
@@ -91,8 +91,8 @@ const ReservationForm = ({value, edit, postId}) => {
             const day = monthPosts.filter((it) => it.day === date);
             const firstTime = moment(`${date} ${time[0].format("HH")}:${time[0].format("mm")}`).valueOf();
             const secondTime = moment(`${date} ${time[1].format("HH")}:${time[1].format("mm")}`).valueOf();
-            const checkFirstTime = day.find((it) => it.startTime < firstTime&&firstTime < it.endTime&&it.id!==parseInt(postId));
-            const checkSecondTime = day.find((it) => it.startTime < secondTime&&secondTime < it.endTime&&it.id!==parseInt(postId));
+            const checkFirstTime = day.find((it) => it.startTime < firstTime&&firstTime < it.endTime&&it.reservationId!==parseInt(reservationId));
+            const checkSecondTime = day.find((it) => it.startTime < secondTime&&secondTime < it.endTime&&it.reservationId!==parseInt(reservationId));
             const formatTime = moment(time[0].valueOf()).format("HH:mm")
             const checkToday = moment(`${date} ${formatTime}`, "YYYY-MM-DD HH:mm").valueOf();
             if(checkToday < moment().valueOf()){
@@ -122,10 +122,10 @@ const ReservationForm = ({value, edit, postId}) => {
             if(edit){
                 dispatch({
                     type: EDIT_POST_REQUEST,
-                    postId: postId,
+                    reservationId: reservationId,
                     data: {
                         day: date,
-                        id: 4,
+                        reservationId: 4,
                         memberId: 1,
                         name: "박건상",
                         startTime: startTime,
@@ -137,7 +137,7 @@ const ReservationForm = ({value, edit, postId}) => {
                     type: ADD_POST_REQUEST,
                     data: {
                         day: date,
-                        id: 4,
+                        reservationId: 4,
                         memberId: 1,
                         name: "박건상",
                         startTime: startTime,
@@ -176,7 +176,7 @@ const ReservationForm = ({value, edit, postId}) => {
 ReservationForm.propTypes = {
     value: PropTypes.object.isRequired,
     edit: PropTypes.bool.isRequired,
-    postId: PropTypes.string.isRequired
+    reservationId: PropTypes.string.isRequired
 }
 
 export default ReservationForm

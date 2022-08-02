@@ -49,11 +49,11 @@ const Profile = () => {
 
     const clickRemove = useCallback((id) => {
         if(me.id&&me){
-            const checkPost = me.Posts.find((it) => it.id === parseInt(id))
+            const checkPost = me.Posts.find((it) => it.reservationId === parseInt(id))
             if(checkPost){
                 dispatch({
                     type: REMOVE_POST_REQUEST,
-                    postId: id
+                    reservationId: id
                 })
             }else{
                 alert('삭제권한이 없습니다.')
@@ -68,7 +68,7 @@ const Profile = () => {
                 {makeArray(profilePosts).map((day, idx) => (
                     <Collapse.Panel header={day.day} key={idx.toString()}>
                         {day.posts.map((item) => (
-                            <Card key={item.id}>{msToTime(item.startTime) + "~" + msToTime(item.endTime)}{item.endtime}     <Button  onClick={() => clickEdit(item.id)}>수정</Button>  <Button loading={removePostLoading} onClick={() => clickRemove(item.id)} type="primary" danger>삭제</Button></Card>
+                            <Card key={item.reservationId}>{msToTime(item.startTime) + "~" + msToTime(item.endTime)}{item.endtime}     <Button  onClick={() => clickEdit(item.reservationId)}>수정</Button>  <Button loading={removePostLoading} onClick={() => clickRemove(item.reservationId)} type="primary" danger>삭제</Button></Card>
                         ))}
                     </Collapse.Panel>      
                 ))}
