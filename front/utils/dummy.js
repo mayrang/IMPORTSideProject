@@ -8,10 +8,8 @@ export const dummyData = [
     {
         day: "2022-07-12",
         id: 2,
-        User: {
-            id: 3,
-            name: "유상우"
-        },
+        memberId: 3,
+        name: "유상우",
         startTime: moment('2022-07-12 13:30').valueOf(),
         endTime: moment('2022-07-12 15:00').valueOf(),
 
@@ -19,10 +17,8 @@ export const dummyData = [
     {
         day: "2022-07-14",
         id: 4,
-        User: {
-            id: 3,
-            name: "유상우"
-        },
+        memberId: 3,
+        name: "유상우",
         startTime: moment('2022-07-12 19:30').valueOf(),
         endTime: moment('2022-07-12 20:30').valueOf(),
 
@@ -30,30 +26,24 @@ export const dummyData = [
     {
         day: "2022-07-12",
         id: 1,
-        User: {
-            id: 3,
-            name: "유상우"
-        },
+        memberId: 3,
+        name: "유상우",
         startTime: moment('2022-07-12 10:35').valueOf(),
         endTime: moment('2022-07-12 12:00').valueOf(),
     },
     {
         day: "2022-07-12",
         id: 3,
-        User: {
-            id: 2,
-            name: "김현겸"
-        },
+        memberId: 2,
+        name: "김현겸",
         startTime: moment('2022-07-12 16:30').valueOf(),
         endTime: moment('2022-07-12 17:30').valueOf(),
     },
     {
         day: "2022-07-31",
         id: 5,
-        User: {
-            id: 1,
-            name: "박건상"
-        },
+        memberId: 1,
+        name: "박건상",
         startTime: moment("2022-07-31 19:30").valueOf(),
         endTime: moment("2022-07-31 20:20").valueOf(),
 
@@ -61,40 +51,32 @@ export const dummyData = [
     {
         day: "2022-07-12",
         id: 6,
-        User: {
-            id: 1,
-            name: "박건상"
-        },
+        memberId: 1,
+        name: "박건상",
         startTime: moment('2022-07-12 18:35').valueOf(),
         endTime: moment('2022-07-12 19:00').valueOf(),
     },
     {
         day: "2022-07-12",
         id: 7,
-        User: {
-            id: 1,
-            name: "박건상"
-        },
+        memberId: 1,
+        name: "박건상",
         startTime: moment('2022-07-12 19:30').valueOf(),
         endTime: moment('2022-07-12 20:30').valueOf(),
     },
     {
         day: "2022-07-12",
         id: 8,
-        User: {
-            id: 3,
-            name: "유상우"
-        },
+        memberId: 3,
+        name: "유상우",
         startTime: moment('2022-07-12 20:35').valueOf(),
         endTime: moment('2022-07-12 21:00').valueOf(),
     },
     {
         day: "2022-07-12",
         id: 9,
-        User: {
-            id: 3,
-            name: "유상우"
-        },
+        memberId: 3,
+        name: "유상우",
         startTime: moment('2022-07-12 16:30').valueOf(),
         endTime: moment('2022-07-12 17:30').valueOf(),
     },
@@ -138,13 +120,29 @@ export const dummyMyInfo = {
     name: "박건상",
     Posts: [
         {
+            day: "2022-07-31",
             id: 5,
+            memberId: 1,
+            name: "박건상",
+            startTime: moment("2022-07-31 19:30").valueOf(),
+            endTime: moment("2022-07-31 20:20").valueOf(),
+    
         },
         {
+            day: "2022-07-12",
             id: 6,
+            memberId: 1,
+            name: "박건상",
+            startTime: moment('2022-07-12 18:35').valueOf(),
+            endTime: moment('2022-07-12 19:00').valueOf(),
         },
         {
+            day: "2022-07-12",
             id: 7,
+            memberId: 1,
+            name: "박건상",
+            startTime: moment('2022-07-12 19:30').valueOf(),
+            endTime: moment('2022-07-12 20:30').valueOf(),
         },
     ]
 }
@@ -154,10 +152,8 @@ export const dummyMyPosts = [
     {
         day: "2022-07-31",
         id: 5,
-        User: {
-            id: 1,
-            name: "박건상"
-        },
+        memberId: 1,
+        name: "박건상",
         startTime: moment("2022-07-31 19:30").valueOf(),
         endTime: moment("2022-07-31 20:20").valueOf(),
 
@@ -165,20 +161,16 @@ export const dummyMyPosts = [
     {
         day: "2022-07-12",
         id: 6,
-        User: {
-            id: 1,
-            name: "박건상"
-        },
+        memberId: 1,
+            name: "박건상",
         startTime: moment('2022-07-12 18:35').valueOf(),
         endTime: moment('2022-07-12 19:00').valueOf(),
     },
     {
         day: "2022-07-12",
         id: 7,
-        User: {
-            id: 1,
-            name: "박건상"
-        },
+        memberId: 1,
+        name: "박건상",
         startTime: moment('2022-07-12 19:30').valueOf(),
         endTime: moment('2022-07-12 20:30').valueOf(),
     },

@@ -7,7 +7,7 @@ import {Button, List, Modal} from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { msToTime } from "../utils/timeFormat";
 import Router, { useRouter } from "next/router";
-import { REMOVE_POST_REQUEST } from "../reducers/post";
+import { LOAD_POST, REMOVE_POST_REQUEST } from "../reducers/post";
 
 
 
@@ -126,7 +126,7 @@ const CalendarView = ({posts, holidays}) => {
     const {year, month} = router.query
     const [modalDay, setModalDay] = useState("");
     const {me} = useSelector((state) => state.user);
-    const {removePostLoading, removePostDone} = useSelector((state) => state.post);
+    const {removePostLoading, removePostDone, monthPosts} = useSelector((state) => state.post);
     const calendarYear = year||parseInt(moment().format('YYYY'));
     const calendarMonth = month||parseInt(moment().format('MM'));
     const checkToday = moment(`${parseInt(calendarYear)}, ${parseInt(calendarMonth)}`, 'YYYYMMDDHHmmss').format("YYYY-MM")
@@ -202,8 +202,23 @@ const CalendarView = ({posts, holidays}) => {
     }, []);
 
     const clickEdit = useCallback((id) => {
-        router.push(`/edit/${id.toString()}`);
-    }, [])
+        if(!(me&&me.id)){
+            alert("로그인을 해주세요")
+            router.replace("/login");
+        }else{
+            const checkPost = me.Posts.find((it) => it.id === parseInt(id));
+            
+            console.log(checkPost)
+            if(!checkPost){
+                alert("수정권한이 없습니다.")
+                router.replace('/')
+            }else{
+                router.push(`/edit/${id}`)
+            }
+        }
+            
+        
+    }, [me&&me.id])
 
     const clickRemove = useCallback((id) => {
         if(me.id&&me){
@@ -229,7 +244,7 @@ const CalendarView = ({posts, holidays}) => {
                 renderItem={(item) => (
                     <List.Item actions={me.id&&me.Posts.find((it)=>it.id === item.id)&&[<Button key={item.id} onClick={() => clickEdit(item.id)}>수정</Button>,<Button loading={removePostLoading} onClick={() => clickRemove(item.id)} type="primary" key={item.id} danger>삭제</Button>]}>
                         <List.Item.Meta
-                            title={item.User.name}
+                            title={item.name}
                             description={msToTime(item.startTime) +"~"+ msToTime(item.endTime)}
                         />
                     </List.Item>
@@ -264,11 +279,11 @@ const CalendarView = ({posts, holidays}) => {
                             <div className="dayDate"><p style={moment().format('YYYY-MM-DD')===(checkToday+"-"+(parseInt(day.day) < 10 ? "0" + day.day : day.day))?{margin: "1px", color:"white", backgroundColor:"black", display: "inline-block", textAlign:"center", padding:".1em"}:{margin: "1px", color:"black", display:"inline-block"}}>{day.day}</p></div>}
                             {day.posts.length<3 ?
                             day.posts.map((post) => (
-                                <ScheduleDiv key={post.id} onClick={() => clickModal(day.posts, day.day)}>{post.User.name} {msToTime(post.startTime)} ~ {msToTime(post.endTime)}</ScheduleDiv>
+                                <ScheduleDiv key={post.id} onClick={() => clickModal(day.posts, day.day)}>{post.name} {msToTime(post.startTime)} ~ {msToTime(post.endTime)}</ScheduleDiv>
                             )) :(
                                 <div>
-                                <ScheduleDiv  onClick={() => clickModal(day.posts, day.day)}>{day.posts[0].User.name} {msToTime(day.posts[0].startTime)} ~ {msToTime(day.posts[0].endTime)}</ScheduleDiv>
-                                <ScheduleDiv  onClick={() => clickModal(day.posts, day.day)}>{day.posts[1].User.name} {msToTime(day.posts[1].startTime)} ~ {msToTime(day.posts[1].endTime)}</ScheduleDiv>
+                                <ScheduleDiv  onClick={() => clickModal(day.posts, day.day)}>{day.posts[0].name} {msToTime(day.posts[0].startTime)} ~ {msToTime(day.posts[0].endTime)}</ScheduleDiv>
+                                <ScheduleDiv  onClick={() => clickModal(day.posts, day.day)}>{day.posts[1].name} {msToTime(day.posts[1].startTime)} ~ {msToTime(day.posts[1].endTime)}</ScheduleDiv>
                                 <EllipsisOutlined style={{width: "100%"}}  onClick={() => clickModal(day.posts, day.day)}/>
                                 </div>
                             )}

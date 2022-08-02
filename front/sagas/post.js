@@ -112,29 +112,6 @@ function loadMyPostsAPI(token){
 }
 
 
-function* watchLoadPost(){
-    yield takeLatest(LOAD_POST_REQUEST, loadPost);
-}
-
-function* loadPost(action){
-    try{
-       // const result = yield call(loadPostAPI, action.postId);
-        yield put({
-            type: LOAD_POST_SUCCESS,
-            data: findSinglePost(parseInt(action.postId)),
-        })
-    }catch(err){
-        console.dir(err);
-        yield put({
-            type: LOAD_POST_FAILURE,
-            error: err.name,
-        });
-    }
-}
-
-function loadPostAPI(postId){
-    return axios.get(`/reservation/${postId.toString()}`);
-}
 
 
 function* watchEditPost(){
@@ -200,7 +177,6 @@ export default function* postSaga() {
         fork(watchAddPost),
         fork(watchLoadHoliday),
         fork(watchLoadMyPosts),
-        fork(watchLoadPost),
         fork(watchEditPost),
         fork(watchRemovePost),
     ])

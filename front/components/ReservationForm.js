@@ -126,10 +126,8 @@ const ReservationForm = ({value, edit, postId}) => {
                     data: {
                         day: date,
                         id: 4,
-                        User: {
-                            id: 1,
-                            name: "박건상"
-                        },
+                        memberId: 1,
+                        name: "박건상",
                         startTime: startTime,
                         endTime: endTime,
                     }
@@ -140,10 +138,8 @@ const ReservationForm = ({value, edit, postId}) => {
                     data: {
                         day: date,
                         id: 4,
-                        User: {
-                            id: 1,
-                            name: "박건상"
-                        },
+                        memberId: 1,
+                        name: "박건상",
                         startTime: startTime,
                         endTime: endTime,
                     }

@@ -18,10 +18,7 @@ const initialState = {
     loadHolidayError: null,
     loadMyPostsLoading: false,
     loadMyPostsDone: false,
-    loadMyPostsError: null,
-    loadPostLoading: false,
-    loadPostDone: false,
-    loadPostError: null, 
+    loadMyPostsError: null, 
     editPostLoading: false,
     editPostDone: false,
     editPostError: null,
@@ -44,15 +41,13 @@ export const LOAD_HOLIDAY_FAILURE = "LOAD_HOLIDAY_FAILURE";
 export const LOAD_MY_POSTS_REQUEST = "LOAD_MY_POSTS_REQUEST";
 export const LOAD_MY_POSTS_SUCCESS = "LOAD_MY_POSTS_SUCCESS";
 export const LOAD_MY_POSTS_FAILURE = "LOAD_MY_POSTS_FAILURE";
-export const LOAD_POST_REQUEST = "LOAD_POST_REQUEST";
-export const LOAD_POST_SUCCESS = "LOAD_POST_SUCCESS";
-export const LOAD_POST_FAILURE = "LOAD_POST_FAILURE";
 export const EDIT_POST_REQUEST = "EDIT_POST_REQUEST";
 export const EDIT_POST_SUCCESS = "EDIT_POST_SUCCESS";
 export const EDIT_POST_FAILURE = "EDIT_POST_FAILURE";
 export const REMOVE_POST_REQUEST = "REMOVE_POST_REQUEST";
 export const REMOVE_POST_SUCCESS = "REMOVE_POST_SUCCESS";
 export const REMOVE_POST_FAILURE = "REMOVE_POST_FAILURE"
+export const LOAD_POST = "LOAD_POST";
 
 
 
@@ -115,19 +110,8 @@ const reducer = (state=initialState, action) => {
                 draft.loadMyPostsLoading = false;
                 draft.loadMyPostsError = action.error;
                 break;
-            case LOAD_POST_REQUEST:
-                draft.loadPostLoading = true;
-                draft.loadPostDone = false;
-                draft.loadPostError = null;
-                break;
-            case LOAD_POST_SUCCESS:
-                draft.loadPostLoading = false;
-                draft.loadPostDone = true;
+            case LOAD_POST:
                 draft.singlePost = action.data;
-                break;
-            case LOAD_POST_FAILURE:
-                draft.loadPostError = action.error;
-                draft.loadPostLoading = false;
                 break;
             case EDIT_POST_REQUEST:
                 draft.editPostLoading = true;
