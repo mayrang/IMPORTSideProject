@@ -12,7 +12,7 @@ import PropTypes from "prop-types"
 
 
 const ReservationForm = ({value, edit, reservationId}) => {
-    const [date, setDate] = useState(value?.day);
+    const [date, setDate] = useState(value?.rsvDate);
     const {loadPostsDone, monthPosts, addPostDone, addPostLoading} = useSelector((state) => state.post);
     const [loadPosts, setLoadPosts] = useState(false); 
     const [startTime, setStartTime] = useState(value?.startTime);
@@ -21,15 +21,16 @@ const ReservationForm = ({value, edit, reservationId}) => {
     const [dateWarning, setDateWarning] = useState(false);
     const [passDate, setPassDate] = useState(false);
     const [checkDate, setCheckDate] = useState(false)
+    const {me} = useSelector((state) => state.user)
     const dispatch = useDispatch();
     const router = useRouter();
 
     useEffect(() => {
-        if(value&&value.day){
+        if(value&&value.rsvDate){
             dispatch({
                 type: LOAD_POSTS_REQUEST,
-                year: parseInt(value.day.slice(0, 4)),
-                month: parseInt(value.day.slice(5, 7)),
+                year: parseInt(value.rsvDate.slice(0, 4)),
+                month: parseInt(value.rsvDate.slice(5, 7)),
                 data: dummyData
             });
             setDateWarning(false);
@@ -41,7 +42,7 @@ const ReservationForm = ({value, edit, reservationId}) => {
         }
         
 
-    }, [value&&value.day])
+    }, [value&&value.rsvDate])
 
 
     useEffect(() => {
@@ -59,8 +60,7 @@ const ReservationForm = ({value, edit, reservationId}) => {
 
     const clickDate = useCallback((value, dateString) => {
         if(value){
-            const checkValue = value.valueOf() + (1000 * 60 * 60 * 24);
-            if(checkValue < moment().valueOf()){
+            if(value.valueOf() < moment("00:00:00", "HH:mm:ss").valueOf()){
                 alert("지난 날짜에는 예약을 할 수 없습니다.")
                 setDateWarning(true);
                 setPassDate(true);
@@ -71,7 +71,6 @@ const ReservationForm = ({value, edit, reservationId}) => {
                     type: LOAD_POSTS_REQUEST,
                     year: parseInt(value.format("YYYY")),
                     month: parseInt(value.format("MM")),
-                    data: dummyData
                 });
                 setDateWarning(false);
                 setDate(dateString);
@@ -88,11 +87,11 @@ const ReservationForm = ({value, edit, reservationId}) => {
     const clickTime = useCallback((time) => {
         if(monthPosts&&time[0] !== null&&time[1] !== null){
             setCheckDate(false)
-            const day = monthPosts.filter((it) => it.day === date);
+            const rsvDate = monthPosts.filter((it) => it.rsvDate === date);
             const firstTime = moment(`${date} ${time[0].format("HH")}:${time[0].format("mm")}`).valueOf();
             const secondTime = moment(`${date} ${time[1].format("HH")}:${time[1].format("mm")}`).valueOf();
-            const checkFirstTime = day.find((it) => it.startTime < firstTime&&firstTime < it.endTime&&it.reservationId!==parseInt(reservationId));
-            const checkSecondTime = day.find((it) => it.startTime < secondTime&&secondTime < it.endTime&&it.reservationId!==parseInt(reservationId));
+            const checkFirstTime = rsvDate.find((it) => it.startTime < firstTime&&firstTime < it.endTime&&it.reservationId!==parseInt(reservationId));
+            const checkSecondTime = rsvDate.find((it) => it.startTime < secondTime&&secondTime < it.endTime&&it.reservationId!==parseInt(reservationId));
             const formatTime = moment(time[0].valueOf()).format("HH:mm")
             const checkToday = moment(`${date} ${formatTime}`, "YYYY-MM-DD HH:mm").valueOf();
             if(checkToday < moment().valueOf()){
@@ -124,10 +123,7 @@ const ReservationForm = ({value, edit, reservationId}) => {
                     type: EDIT_POST_REQUEST,
                     reservationId: reservationId,
                     data: {
-                        day: date,
-                        reservationId: 4,
-                        memberId: 1,
-                        name: "박건상",
+                        rsvDate: date,
                         startTime: startTime,
                         endTime: endTime,
                     }
@@ -136,10 +132,8 @@ const ReservationForm = ({value, edit, reservationId}) => {
                 dispatch({
                     type: ADD_POST_REQUEST,
                     data: {
-                        day: date,
-                        reservationId: 4,
-                        memberId: 1,
-                        name: "박건상",
+                        rsvDate: date,
+                        rsvMemberId: me.id,
                         startTime: startTime,
                         endTime: endTime,
                     }
@@ -174,9 +168,9 @@ const ReservationForm = ({value, edit, reservationId}) => {
 };
 
 ReservationForm.propTypes = {
-    value: PropTypes.object.isRequired,
-    edit: PropTypes.bool.isRequired,
-    reservationId: PropTypes.string.isRequired
+    value: PropTypes.object,
+    edit: PropTypes.bool,
+    reservationId: PropTypes.string
 }
 
 export default ReservationForm

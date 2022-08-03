@@ -18,11 +18,11 @@ const makeArray = (posts) => {
     const sortedPosts = copyPosts.sort((a, b) => a.startTime - b.startTime);
     const postArray = [];
     for(const post of sortedPosts){
-        const checkPost = postArray.find((it) => it.day === post.day);
+        const checkPost = postArray.find((it) => it.rsvDate === post.rsvDate);
         if(checkPost){
-            postArray.find((it) => it.day === post.day).posts.push(post)
+            postArray.find((it) => it.rsvDate === post.rsvDate).posts.push(post)
         }else{
-            postArray.push({day: post.day, posts:[post]})
+            postArray.push({rsvDate: post.rsvDate, posts:[post]})
         }
     }
     return postArray;
@@ -73,7 +73,7 @@ const Profile = () => {
             <Typography.Title style={{margin: "2rem"}} level={2}>내 예약 보기</Typography.Title>
             <Collapse defaultActiveKey={['0']}>
                 {makeArray(profilePosts).map((day, idx) => (
-                    <Collapse.Panel header={day.day} key={idx.toString()}>
+                    <Collapse.Panel header={day.rsvDate} key={idx.toString()}>
                         {day.posts.map((item) => (
                             <Card key={item.reservationId}>{msToTime(item.startTime) + "~" + msToTime(item.endTime)}{item.endtime}     <Button  onClick={() => clickEdit(item.reservationId)}>수정</Button>  <Button loading={removePostLoading} onClick={() => clickRemove(item.reservationId)} type="primary" danger>삭제</Button></Card>
                         ))}

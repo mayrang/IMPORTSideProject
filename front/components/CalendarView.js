@@ -226,7 +226,8 @@ const CalendarView = ({posts, holidays}) => {
             if(checkPost){
                 dispatch({
                     type: REMOVE_POST_REQUEST,
-                    reservationId: id
+                    reservationId: id,
+                    rsvMemberId: me
                 })
             }else{
                 alert('삭제권한이 없습니다.')

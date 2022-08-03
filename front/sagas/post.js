@@ -3,18 +3,16 @@ import { all, call, fork, put, takeLatest } from "redux-saga/effects";
 
 import { ADD_POST_FAILURE, ADD_POST_REQUEST, ADD_POST_SUCCESS, EDIT_POST_FAILURE, EDIT_POST_REQUEST, EDIT_POST_SUCCESS, LOAD_HOLIDAY_FAILURE, LOAD_HOLIDAY_REQUEST, LOAD_HOLIDAY_SUCCESS, LOAD_MY_POSTS_FAILURE, LOAD_MY_POSTS_REQUEST, LOAD_MY_POSTS_SUCCESS, LOAD_POSTS_FAILURE, LOAD_POSTS_REQUEST, LOAD_POSTS_SUCCESS, LOAD_POST_FAILURE, LOAD_POST_REQUEST, LOAD_POST_SUCCESS, REMOVE_POST_FAILURE, REMOVE_POST_REQUEST, REMOVE_POST_SUCCESS } from "../reducers/post";
 import { getCookie } from "../utils/cookie";
-import { dummyMyInfo, dummyMyPosts, findSinglePost } from "../utils/dummy";
-
 function* watchLoadPosts () {
     yield takeLatest(LOAD_POSTS_REQUEST, loadPosts);
 }
 
 function* loadPosts(action) {
     try{
-        //const result = yield call(loadPostsAPI, action.year, action.month, action.memberId);
+        const result = yield call(loadPostsAPI, action.year, action.month, action.memberId);
         yield put({
             type:LOAD_POSTS_SUCCESS,
-            data: action.data
+            data: result.data
         });
     }catch(err){
         console.error(err);
@@ -36,11 +34,10 @@ function* watchAddPost() {
 
 function* addPost(action){
     try{
-        //const token = getCookie('jwtToken')
-        //const result = yield call(addPostAPI, action.data, token);
+        const token = getCookie('jwtToken')
+        const result = yield call(addPostAPI, action.data, token);
         yield put({
             type: ADD_POST_SUCCESS,
-            data: action.data
         })
     }catch(err){
         console.error(err);
@@ -65,10 +62,10 @@ function* watchLoadHoliday(){
 
 function* loadHoliday(action){
     try{
-        //const result = yield call(loadHolidayAPI, action.year, action.month);
+        const result = yield call(loadHolidayAPI, action.year, action.month);
         yield put({
             type: LOAD_HOLIDAY_SUCCESS,
-            data: action.data
+            data: result.data
         });
     }catch(err){
         console.error(err);
@@ -90,11 +87,11 @@ function* watchLoadMyPosts(){
 
 function* loadMyPosts(action){
     try{
-        //const token = getCookie('jwtToken')
-//      const result = yield call(loadMyPostsAPI, token, action.memberId);
+        const token = getCookie('jwtToken')
+        const result = yield call(loadMyPostsAPI, token, action.memberId);
         yield put({
             type: LOAD_MY_POSTS_SUCCESS,
-            data: action.data,
+            data: result.data,
         });
     }catch(err){
         console.error(err);
@@ -121,12 +118,12 @@ function* watchEditPost(){
 
 function* editPost(action){
     try{
-        //const token = getCookie('jwtToken')
-//        const result = yield call(editPostAPI, action.data, action.reservationId, token);
+        const token = getCookie('jwtToken')
+       const result = yield call(editPostAPI, action.data, action.reservationId, token);
         console.log(action.data, action.reservationId)
         yield put({
             type: EDIT_POST_SUCCESS,
-            data: action.data
+            data: result.data
         })
     }catch(err){
         console.error(err);
@@ -151,8 +148,8 @@ function* watchRemovePost(){
 
 function* removePost(action){
     try{
-        //const token = getCookie('jwtToken')
-        //const result = yield call(removePostAPI, action.reservationId, token);
+        const token = getCookie('jwtToken')
+        const result = yield call(removePostAPI, action.reservationId, action.rsvMemberId, token);
         yield put({
             type: REMOVE_POST_SUCCESS,
         })
@@ -165,8 +162,8 @@ function* removePost(action){
     }
 }
 
-function removePostAPI(reservationId, token){
-    return axios.delete(`/reservation/${reservationId.toString()}`, {}, {
+function removePostAPI(reservationId, rsvMemberId, token){
+    return axios.delete(`/reservation/${reservationId.toString()}`, {rsvMemberId: rsvMemberId}, {
         headers: {
             'Authorization': `Bearer ${token}`
         }})

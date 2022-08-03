@@ -6,16 +6,16 @@ import moment from "moment";
 export const dummyData = [
    
     {
-        day: "2022-07-12",
+        rsvDate: moment('2022-07-12 20:30').format("YYYY-MM-DD"),
         reservationId: 2,
         memberId: 3,
         name: "유상우",
-        startTime: moment('2022-07-12 13:30').valueOf(),
-        endTime: moment('2022-07-12 15:00').valueOf(),
+        startTime: moment('2022-07-12 03:30').valueOf(),
+        endTime: moment('2022-07-12 04:00').valueOf(),
 
     },
     {
-        day: "2022-07-14",
+        rsvDate: "2022-07-14",
         reservationId: 4,
         memberId: 3,
         name: "유상우",
@@ -24,7 +24,7 @@ export const dummyData = [
 
     },
     {
-        day: "2022-07-12",
+        rsvDate: "2022-07-12",
         reservationId: 1,
         memberId: 3,
         name: "유상우",
@@ -32,7 +32,7 @@ export const dummyData = [
         endTime: moment('2022-07-12 12:00').valueOf(),
     },
     {
-        day: "2022-07-12",
+        rsvDate: "2022-07-12",
         reservationId: 3,
         memberId: 2,
         name: "김현겸",
@@ -40,7 +40,7 @@ export const dummyData = [
         endTime: moment('2022-07-12 17:30').valueOf(),
     },
     {
-        day: "2022-07-31",
+        rsvDate: "2022-07-31",
         reservationId: 5,
         memberId: 1,
         name: "박건상",
@@ -49,7 +49,7 @@ export const dummyData = [
 
     },
     {
-        day: "2022-07-12",
+        rsvDate: "2022-07-12",
         reservationId: 6,
         memberId: 1,
         name: "박건상",
@@ -57,7 +57,7 @@ export const dummyData = [
         endTime: moment('2022-07-12 19:00').valueOf(),
     },
     {
-        day: "2022-07-12",
+        rsvDate: "2022-07-12",
         reservationId: 7,
         memberId: 1,
         name: "박건상",
@@ -65,7 +65,7 @@ export const dummyData = [
         endTime: moment('2022-07-12 20:30').valueOf(),
     },
     {
-        day: "2022-07-12",
+        rsvDate: "2022-07-12",
         reservationId: 8,
         memberId: 3,
         name: "유상우",
@@ -73,7 +73,7 @@ export const dummyData = [
         endTime: moment('2022-07-12 21:00').valueOf(),
     },
     {
-        day: "2022-07-12",
+        rsvDate: "2022-07-12",
         reservationId: 9,
         memberId: 3,
         name: "유상우",
@@ -120,7 +120,7 @@ export const dummyMyInfo = {
     name: "박건상",
     Posts: [
         {
-            day: "2022-07-31",
+            rsvDate: "2022-07-31",
             reservationId: 5,
             memberId: 1,
             name: "박건상",
@@ -129,7 +129,7 @@ export const dummyMyInfo = {
     
         },
         {
-            day: "2022-07-12",
+            rsvDate: "2022-07-12",
             reservationId: 6,
             memberId: 1,
             name: "박건상",
@@ -137,7 +137,7 @@ export const dummyMyInfo = {
             endTime: moment('2022-07-12 19:00').valueOf(),
         },
         {
-            day: "2022-07-12",
+            rsvDate: "2022-07-12",
             reservationId: 7,
             memberId: 1,
             name: "박건상",
@@ -150,7 +150,7 @@ export const dummyMyInfo = {
 
 export const dummyMyPosts = [
     {
-        day: "2022-07-31",
+        rsvDate: "2022-07-31",
         reservationId: 5,
         memberId: 1,
         name: "박건상",
@@ -159,7 +159,7 @@ export const dummyMyPosts = [
 
     },
     {
-        day: "2022-07-12",
+        rsvDate: "2022-07-12",
         reservationId: 6,
         memberId: 1,
             name: "박건상",
@@ -167,7 +167,7 @@ export const dummyMyPosts = [
         endTime: moment('2022-07-12 19:00').valueOf(),
     },
     {
-        day: "2022-07-12",
+        rsvDate: "2022-07-12",
         reservationId: 7,
         memberId: 1,
         name: "박건상",

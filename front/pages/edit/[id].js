@@ -45,7 +45,6 @@ const Edit = () => {
 export const getServerSideProps = wrapper.getServerSideProps((store) => async ({req}) => {
     const cookie = req ? req.headers.cookie : '';
     console.log(req&&cookieStringToObject(cookie)['jwtToken'])
-    console.log(store.getState().post)
     if(req&&cookieStringToObject(cookie)['jwtToken']){
         store.dispatch({
             type: LOAD_MY_INFO_REQUEST,
