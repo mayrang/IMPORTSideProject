@@ -36,9 +36,16 @@ const Profile = () => {
     const {profilePosts, removePostLoading} = useSelector((state) => state.post);
     const dispatch = useDispatch();
     useEffect(() => {
-        if(!me&&!me.id){
+        if(!(me&&me.id)){
             alert("로그인한 사용자만 접속 가능합니다.")
             router.replace("/");
+        }else{
+            
+            dispatch({
+                type: LOAD_MY_POSTS_REQUEST,
+                data: dummyMyPosts,
+                memberId: me.id
+            });
         }
     }, [me&&me.id]);
 
@@ -80,11 +87,7 @@ const Profile = () => {
 export const getServerSideProps = wrapper.getServerSideProps((store) => async ({req}) => {
     const cookie = req ? req.headers.cookie : '';
     console.log(req&&cookieStringToObject(cookie)['jwtToken'])
-    
-    store.dispatch({
-        type: LOAD_MY_POSTS_REQUEST,
-        data: dummyMyPosts,
-    });
+
        
     if(req&&cookieStringToObject(cookie)['jwtToken']){
         store.dispatch({

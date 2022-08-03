@@ -41,7 +41,7 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
             type: LOAD_POSTS_REQUEST,
             year: parseInt(query.year),
             month: parseInt(query.month),
-            userId: user.me.id ? user.me.id : 0,
+            memberId: user.me.id ? user.me.id : 0,
             data: dummyData,
         });
         store.dispatch({
@@ -55,7 +55,7 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
             type: LOAD_POSTS_REQUEST,
             year: parseInt(moment().add(9, 'h').format('YYYY')),
             month: parseInt(moment().add(9, 'h').format('MM')),
-            userId: user.me.id ? user.me.id : 0,
+            memberId: user.me.id ? user.me.id : 0,
             data: dummyData,
         });
         store.dispatch({

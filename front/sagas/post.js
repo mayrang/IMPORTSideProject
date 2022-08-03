@@ -11,7 +11,7 @@ function* watchLoadPosts () {
 
 function* loadPosts(action) {
     try{
-        //const result = yield call(loadPostsAPI, action.year, action.month, action.userId);
+        //const result = yield call(loadPostsAPI, action.year, action.month, action.memberId);
         yield put({
             type:LOAD_POSTS_SUCCESS,
             data: action.data
@@ -25,8 +25,8 @@ function* loadPosts(action) {
     }
 }
 
-function loadPostsAPI(year, month, userId){
-    return axios.get(`/reservation?year=${year.toString()}&month=${month.toString()}&memberId=${userId.toString()}`);
+function loadPostsAPI(year, month, memberId){
+    return axios.get(`/reservation?year=${year.toString()}&month=${month.toString()}&memberId=${memberId.toString()}`);
 }
 
 
@@ -90,7 +90,8 @@ function* watchLoadMyPosts(){
 
 function* loadMyPosts(action){
     try{
-//      const result = yield call(loadMyPostsAPI, action.year, action.month);
+        //const token = getCookie('jwtToken')
+//      const result = yield call(loadMyPostsAPI, token, action.memberId);
         yield put({
             type: LOAD_MY_POSTS_SUCCESS,
             data: action.data,
@@ -104,8 +105,8 @@ function* loadMyPosts(action){
     }
 }
 
-function loadMyPostsAPI(token){
-    return axios.get(`/test`, {}, {
+function loadMyPostsAPI(token, memberId){
+    return axios.get(`/reservation?memberId=${memberId}`, {}, {
         headers: {
             'Authorization': `Bearer ${token}`
         }});
