@@ -62,13 +62,13 @@ function* watchLoadMyInfo(){
     yield takeLatest(LOAD_MY_INFO_REQUEST, loadMyInfo);
 }
 
-function* loadMyInfo(action){
+function* loadMyInfo(){
     try{
         const token = getCookie('jwtToken')
         const result = yield call(loadMyInfoAPI, token);
         yield put({
             type: LOAD_MY_INFO_SUCCESS,
-            data: dummyMyInfo,
+            data: result.data.myInfo,
         });
         axios.defaults.headers.common['Authorization'] = `Bearer ${result.data.jwtToken}`
         setCookie('jwtToken', result.data.jwtToken, {path: "/", maxAge: 1800, httpOnly: true})

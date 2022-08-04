@@ -109,9 +109,6 @@ const reducer = (state=initialState, action) => {
                 draft.loadMyPostsLoading = false;
                 draft.loadMyPostsError = action.error;
                 break;
-            case LOAD_POST:
-                draft.singlePost = action.data;
-                break;
             case EDIT_POST_REQUEST:
                 draft.editPostLoading = true;
                 draft.editPostDone = false;
