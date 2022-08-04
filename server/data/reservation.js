@@ -45,12 +45,12 @@ export async function cancel(rsvMemberId, rsvId){
         .then((result) => result[0].affectedRows);
 }
 
-export async function update(reservationId, rsvDate, startTime, endTime){
+export async function update(reservationId, rsvMemberId, rsvDate, startTime, endTime){
     return db
         .execute(`UPDATE reservation
         SET rsvDate = ?, startTime = ?, endTime = ?
-        WHERE id = ?`, 
-        [rsvDate, startTime, endTime, reservationId])
+        WHERE id = ? and rsvMemberId = ?`, 
+        [rsvDate, startTime, endTime, reservationId,rsvMemberId])
         .then((result) => result[0].affectedRows);
 }
 

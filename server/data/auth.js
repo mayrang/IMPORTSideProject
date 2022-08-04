@@ -2,8 +2,20 @@ import { db } from '../db/database.js';
 
 export async function findByStudentId(studentId){
     return db
-        .execute('SELECT * FROM member WHERE studentId=?', [studentId])//
-        .then((result) => result[0][0]);//TODO: 리턴값 확인, 변경 필요?
+        .execute('SELECT * FROM member WHERE studentId=? ', [studentId])//
+        .then((result) => result[0][0]);
+}
+
+export async function findByPhoneNumber(phoneNumber){
+    return db
+        .execute('SELECT * FROM member WHERE phoneNumber=? ', [phoneNumber])//
+        .then((result) => result[0][0]);
+}
+
+export async function findByEmail(email){
+    return db
+        .execute('SELECT * FROM member WHERE email=? ', [email])//
+        .then((result) => result[0][0]);
 }
 
 export async function findById(id){

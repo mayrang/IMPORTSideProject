@@ -8,9 +8,10 @@ const router = express.Router();
 
 router.post('/',isAuth, reservationController.createReservation); 
 
-router.get('/:reservationId',reservationController.getReservation);
+router.get('/:reservationId',isAuth, reservationController.getReservation);
 router.get('/',reservationController.getReservation);
-router.put('/:reservationId',reservationController.updateReservation);//isAuth
+
+router.put('/:reservationId',isAuth, reservationController.updateReservation);
 
 router.delete('/:reservationId',isAuth,reservationController.cancelReservation); 
 

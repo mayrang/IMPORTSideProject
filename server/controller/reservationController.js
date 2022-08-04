@@ -32,7 +32,7 @@ export async function getReservation(req,res){ //getReservation without id
 
     // const reservationList = await reservationRepository.getMonthly(startMonth, endMonth);
 
-    const reservationList = await (memberId? (reservationId? reservationRepository.getById(memberId, reservationId) // /reservation/[reservationId] 
+    const reservationList = await (memberId? (reservationId? reservationRepository.getById(memberId, reservationId) // /reservation/[reservationId] 나중에 없애기
                             : reservationRepository.getByMemberId(memberId))  // /reservation?memberId=
                             : reservationRepository.getMonthly(startMonth, endMonth)); ///reservation?year=,month=
 
@@ -71,9 +71,11 @@ export async function cancelReservation(req,res){
 export async function updateReservation(req,res){
     const { rsvDate, startTime, endTime } = req.body;
     
-    const { reservationId } = req.params;
+    const { reservationId } = req.params;//token으로 해석한 memberId
+    const rsvMemberId= req.memberId;
+    console.log(rsvMemberId);
 
-    const isUpdated = await reservationRepository.update(reservationId, rsvDate, startTime, endTime);
+    const isUpdated = await reservationRepository.update(reservationId, rsvMemberId, rsvDate, startTime, endTime);
     
     if(isUpdated<1){
         res.sendStatus(400);
