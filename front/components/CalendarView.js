@@ -7,7 +7,7 @@ import {Button, List, Modal} from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { msToTime } from "../utils/timeFormat";
 import Router, { useRouter } from "next/router";
-import { LOAD_POST, REMOVE_POST_REQUEST } from "../reducers/post";
+import {REMOVE_POST_REQUEST } from "../reducers/post";
 
 
 
@@ -126,7 +126,7 @@ const CalendarView = ({posts, holidays}) => {
     const {year, month} = router.query
     const [modalDay, setModalDay] = useState("");
     const {me} = useSelector((state) => state.user);
-    const {removePostLoading, removePostDone, monthPosts} = useSelector((state) => state.post);
+    const {removePostLoading, removePostDone} = useSelector((state) => state.post);
     const calendarYear = year||parseInt(moment().format('YYYY'));
     const calendarMonth = month||parseInt(moment().format('MM'));
     const checkToday = moment(`${parseInt(calendarYear)}, ${parseInt(calendarMonth)}`, 'YYYYMMDDHHmmss').format("YYYY-MM")
