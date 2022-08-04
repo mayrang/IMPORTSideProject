@@ -243,9 +243,10 @@ const SignupForm = () => {
             ]}>
                 <Input />
             </Form.Item>
-            <Form.Item label="ID" name="studentId" rules={[
-                {required: true, message: "ID는 필수 입력 항목입니다."},
-                {max: 45, message: "ID는 45글자 미만이여야 합니다."},
+            <Form.Item label="학번" name="studentId" rules={[
+                {required: true, message: "학번은 필수 입력 항목입니다."},
+                {validator: (_, value) => value.match(/^[0-9]+$/) !== null ? Promise.resolve() : Promise.reject(new Error('숫자로만 입력해주세요'))},
+                {min: 8, max:8, message: "학번은 8자리 입니다."}
             ]}>
                 <Input />
             </Form.Item>
