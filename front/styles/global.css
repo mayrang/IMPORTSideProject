@@ -1,0 +1,32 @@
+.dayHeader {
+    
+    text-align: center;
+}
+
+.dayHeader div {
+    background-color: rgb(204, 200, 200);
+    font-weight: bold;
+    text-align: center;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+}
+
+
+.dayBody > div {
+    height: 100%;
+    color: #222;
+    font-weight: bold;
+    min-height: 6rem;
+    border: 1px solid #eee;
+    overflow-x: auto;
+}
+
+.dayBody .dayDate {
+    font-size: 0.8rem;
+    margin-top: .3rem;
+    margin-left: .3rem;
+
+}
