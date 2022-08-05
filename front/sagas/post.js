@@ -65,7 +65,7 @@ function* loadHoliday(action){
         const result = yield call(loadHolidayAPI, action.year, action.month);
         yield put({
             type: LOAD_HOLIDAY_SUCCESS,
-            data: result.data
+            data: result? result.data : []
         });
     }catch(err){
         console.error(err);

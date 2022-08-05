@@ -74,6 +74,7 @@ const ScheduleDiv = styled.div`
 
 
 const calendarArray = (year, month, posts, holidays) => {
+    console.log("holiday", holidays)
     let newMonth = [];
     const firstDay = new Date(year, month - 1, 1).getDay();
     const lastDay = new Date(year, month, 0).getDate();
@@ -92,7 +93,8 @@ const calendarArray = (year, month, posts, holidays) => {
                 const yearMonthDayHolidays = year
                                         + (month < 10 ? "0" + (month) : month)
                                         + (count < 10 ? "0" + count : count);
-                const findHoliday = holidays.find((it) => it.locdate.toString() === yearMonthDayHolidays)
+                // const findHoliday = holidays.find((it) => it.locdate.toString() === yearMonthDayHolidays)
+                const findHoliday = false;
                 let findPosts = posts.filter((it) => it.day === yearMonthDayPosts);
                 findPosts.sort((a, b) => a.startTime - b.startTime);
                 if(findPosts){

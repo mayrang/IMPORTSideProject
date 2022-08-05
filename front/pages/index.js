@@ -42,13 +42,11 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
             year: parseInt(query.year),
             month: parseInt(query.month),
             memberId: user.me.id ? user.me.id : 0,
-            data: dummyData,
         });
         store.dispatch({
             type: LOAD_HOLIDAY_REQUEST,
             year: parseInt(query.year),
             month: parseInt(query.month),
-            data: dummyHolidays,
         });
     }else{
         store.dispatch({
@@ -56,13 +54,11 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
             year: parseInt(moment().add(9, 'h').format('YYYY')),
             month: parseInt(moment().add(9, 'h').format('MM')),
             memberId: user.me.id ? user.me.id : 0,
-            data: dummyData,
         });
         store.dispatch({
             type: LOAD_HOLIDAY_REQUEST,
             year: parseInt(moment().add(9, 'h').format('YYYY')),
             month: parseInt(moment().add(9, 'h').format('MM')),
-            data: dummyHolidays,
         });
     }
     if(req&&cookieStringToObject(cookie)['jwtToken']){

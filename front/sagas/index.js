@@ -3,7 +3,7 @@ import {fork, all} from "redux-saga/effects"
 import postSaga from "./post";
 import userSaga from "./user";
 
-axios.defaults.baseURL = "http://localhost:3080";
+axios.defaults.baseURL = "http://localhost:8080";
 axios.defaults.withCredentials = true;
 
 export default function* rootSaga() {
