@@ -12,11 +12,17 @@ export async function signup(req, res){
     const foundPhoneNumber = await userRepository.findByPhoneNumber(phoneNumber);
     const foundEmail = await userRepository.findByEmail(email);
 
-    if(found){
+    if(foundStudentId){
         return res.status(409).json({ message: `${studentId} already exists` });//오류코드
     }
 
+    if(foundPhoneNumber){
+        return res.status(409).json({ message: `${phoneNumber} already exists` });//오류코드
+    }
 
+    if(foundEmail){
+        return res.status(409).json({ message: `${email} already exists` });//오류코드
+    }
 
     const hashed = await bcrypt.hash(password, config.bcrypt.saltRounds);
     const memberId = await userRepository.createUser({
