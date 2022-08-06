@@ -12,7 +12,7 @@ function* loadPosts(action) {
         const result = yield call(loadPostsAPI, action.year, action.month, action.memberId);
         yield put({
             type:LOAD_POSTS_SUCCESS,
-            data: result.data
+            data: result.data === "" ? [] : result.data
         });
     }catch(err){
         console.error(err);
@@ -65,7 +65,7 @@ function* loadHoliday(action){
         const result = yield call(loadHolidayAPI, action.year, action.month);
         yield put({
             type: LOAD_HOLIDAY_SUCCESS,
-            data: result? result.data : []
+            data: result.data === "" ? [] : result.data
         });
     }catch(err){
         console.error(err);
@@ -77,7 +77,7 @@ function* loadHoliday(action){
 }
 
 function loadHolidayAPI(year, month){
-    return axios.get(`/holiday?year=${year}&month=${month}`)
+    return axios.get(`/holiday?year=${year.toString()}&month=${month.toString()}`)
 }
 
 

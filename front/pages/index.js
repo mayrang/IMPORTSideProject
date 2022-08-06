@@ -8,7 +8,6 @@ import { END } from "redux-saga";
 import {useSelector} from "react-redux";
 import { cookieStringToObject } from "../utils/cookieString";
 import { LOAD_MY_INFO_REQUEST } from "../reducers/user";
-import { dummyData, dummyHolidays } from "../utils/dummy";
 
 
 //moment valueOf 안붙이면 moment객체로 가는데 그것도 miliseconds로 인식하는듯?
