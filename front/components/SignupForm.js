@@ -212,13 +212,20 @@ const majorOptions = [
 
 const SignupForm = () => {
     const dispatch = useDispatch();
-    const {signUpLoading, signUpDone} = useSelector((state) => state.user);
+    const {signUpLoading, signUpDone, signUpError} = useSelector((state) => state.user);
     const router = useRouter();
     useEffect(() => {
         if(signUpDone){
             router.replace("/");
         }
-    }, [signUpDone])
+    }, [signUpDone]);
+
+    useEffect(() => {
+        if(signUpError){
+            alert(signUpError.message)
+        }
+    }, [signUpError]);
+
 
     const submitSignup = useCallback((value) => {
         dispatch({
@@ -250,7 +257,7 @@ const SignupForm = () => {
             ]}>
                 <Input />
             </Form.Item>
-            <Form.Item  label="비밀번호" rules={[{ required: true, message: "비밀번호는 필수 입력 항목입니다."}]} hasFeedback name="password" >
+            <Form.Item  label="비밀번호" rules={[{ required: true, message: "비밀번호는 필수 입력 항목입니다."}, {min: 5, message: "비밀번호는 5글자 이상 이여야 합니다."}]} hasFeedback name="password" >
                 <Input.Password />
             </Form.Item>
             <Form.Item  label="비밀번호 확인" hasFeedback dependencies={['password']} rules={[

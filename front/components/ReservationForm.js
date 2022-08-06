@@ -12,7 +12,7 @@ import PropTypes from "prop-types"
 
 const ReservationForm = ({value, edit, reservationId}) => {
     const [date, setDate] = useState(value?.rsvDate);
-    const {loadPostsDone, monthPosts, addPostDone, addPostLoading} = useSelector((state) => state.post);
+    const {loadPostsDone, monthPosts, addPostDone, addPostLoading, editPostDone, editPostError, addPostError, editPostLoading} = useSelector((state) => state.post);
     const [loadPosts, setLoadPosts] = useState(false); 
     const [startTime, setStartTime] = useState(value?.startTime);
     const [endTime, setEndTime] = useState(value?.endTime);
@@ -42,9 +42,26 @@ const ReservationForm = ({value, edit, reservationId}) => {
 
     }, [value&&value.rsvDate])
 
+    useEffect(() => {
+        if(editPostError){
+            alert(editPostError.message);
+        }else if(addPostError){
+            alert(addPostError.message);
+        }
+    }, [editPostError, addPostError])
+
 
     useEffect(() => {
         if(addPostDone){
+            router.replace({
+                pathname: '/',
+                query: {
+                    year: parseInt(date.slice(0, 4)).toString(),
+                    month: parseInt(date.slice(5, 7)).toString(),
+                }
+            });
+        }
+        if(editPostDone){
             router.replace({
                 pathname: '/',
                 query: {
@@ -158,7 +175,7 @@ const ReservationForm = ({value, edit, reservationId}) => {
                 <Steps.Step  title="날짜를 지정해주세요" description={<DatePicker status={dateWarning&&"error"}  value={dateWarning||!passDate? null : moment(date, "YYYY-MM-DD")} onChange={clickDate}/>}/>
                 <Steps.Step title="Step 2" description={loadPostsDone&&loadPosts&&passDate? <TimePicker.RangePicker status={timeWarning&&"error"} value={timeWarning||checkDate ? null : [moment(startTime), moment(endTime)]} onOk={clickTime} format={"HH:mm"} /> : "Step 1을 완료해주세요"} />
             </Steps>
-            {<Button onClick={clickReservation} loading={addPostLoading}>예약</Button>}
+            {<Button onClick={clickReservation} loading={addPostLoading||editPostLoading}>예약</Button>}
             <Divider />
         </>
 
