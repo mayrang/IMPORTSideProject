@@ -6,7 +6,7 @@ import { LOG_IN_REQUEST } from "../reducers/user";
 
 const LoginForm = () => {
     const dispatch = useDispatch();
-    const {logInLoading, logInDone} = useSelector((state) => state.user);
+    const {logInLoading, logInDone, logInError} = useSelector((state) => state.user);
     const router = useRouter()
     
     useEffect(() => {
@@ -14,6 +14,12 @@ const LoginForm = () => {
             router.replace('/')
         }
     }, [logInDone]);
+
+    useEffect(() => {
+        if(logInError){
+            alert(logInError.message);
+        }
+    }, [logInError])
 
     const submitLogin = useCallback((value) => {
         dispatch({
