@@ -14,7 +14,6 @@ router.get('/',  (req,res,next)=>{
         method: 'get',
         url: config.openapi.url + config.openapi.year + `${year}` + config.openapi.month + `${(month < 10 ? "0" + (month) : month)}`
       }).then(function(response){
-        console.log(response.data.response.body.items)
         if(response.data.response.body.totalCount===1)
             res.status(200).json([response.data.response.body.items.item]);
         else 

@@ -5,7 +5,6 @@ import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ADD_POST_REQUEST, EDIT_POST_REQUEST, LOAD_POSTS_REQUEST } from "../reducers/post";
-import { dummyData } from "../utils/dummy";
 import PropTypes from "prop-types"
 
 
@@ -31,7 +30,6 @@ const ReservationForm = ({value, edit, reservationId}) => {
                 type: LOAD_POSTS_REQUEST,
                 year: parseInt(value.rsvDate.slice(0, 4)),
                 month: parseInt(value.rsvDate.slice(5, 7)),
-                data: dummyData
             });
             setDateWarning(false);
             setCheckDate(false)
@@ -121,7 +119,7 @@ const ReservationForm = ({value, edit, reservationId}) => {
             if(edit){
                 dispatch({
                     type: EDIT_POST_REQUEST,
-                    reservationId: reservationId,
+                    reservationId: parseInt(reservationId),
                     data: {
                         rsvDate: date,
                         startTime: startTime,
@@ -133,7 +131,7 @@ const ReservationForm = ({value, edit, reservationId}) => {
                     type: ADD_POST_REQUEST,
                     data: {
                         rsvDate: date,
-                        rsvMemberId: me.id,
+                        rsvMemberId: parseInt(me.id),
                         startTime: startTime,
                         endTime: endTime,
                     }

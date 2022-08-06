@@ -1,8 +1,7 @@
 import axios from "axios";
 import { all, call, fork, put, takeLatest } from "redux-saga/effects";
 import {LOAD_MY_INFO_FAILURE, LOAD_MY_INFO_REQUEST, LOAD_MY_INFO_SUCCESS, LOG_IN_FAILURE, LOG_IN_REQUEST, LOG_IN_SUCCESS, LOG_OUT_FAILURE, LOG_OUT_REQUEST, LOG_OUT_SUCCESS, SIGN_UP_FAILURE, SIGN_UP_REQUEST, SIGN_UP_SUCCESS } from "../reducers/user";
-import { getCookie, removeCookie, setCookie } from "../utils/cookie";
-
+import Cookies from "js-cookie";
 
 function* watchSignUp() {
     yield takeLatest(SIGN_UP_REQUEST ,signUp);
@@ -16,7 +15,7 @@ function* signUp(action) {
             data: result.data.myInfo
         });
         axios.defaults.headers.common['Authorization'] = `Bearer ${result.data.jwtToken}`
-        setCookie('jwtToken', result.data.jwtToken, {path: "/", maxAge: 1800});
+        Cookies.set('jwtToken', result.data.jwtToken, {expires: 1/48})
 
     }catch(err){
         console.error(err);
@@ -43,7 +42,7 @@ function* logIn(action){
             data: result.data.myInfo,
         });
         axios.defaults.headers.common['Authorization'] = `Bearer ${result.data.jwtToken}`
-        setCookie('jwtToken', result.data.jwtToken, {path: "/", maxAge: 1800})
+        Cookies.set('jwtToken', result.data.jwtToken, {expires: 1/48})
     }catch(err){
         console.error(err);
         yield put({
@@ -63,14 +62,13 @@ function* watchLoadMyInfo(){
 
 function* loadMyInfo(){
     try{
-        const token = getCookie('jwtToken')
-        const result = yield call(loadMyInfoAPI, token);
+        const result = yield call(loadMyInfoAPI);
         yield put({
             type: LOAD_MY_INFO_SUCCESS,
             data: result.data.myInfo,
         });
-        axios.defaults.headers.common['Authorization'] = `Bearer ${result.data.jwtToken}`
-        setCookie('jwtToken', result.data.jwtToken, {path: "/", maxAge: 1800, httpOnly: true})
+        axios.defaults.headers.common['Authorization'] = `Bearer ${result.data.jwtToken}`||null;
+        Cookies.set('jwtToken', result.data.jwtToken, {expires: 1/48})
     }catch(err){
         console.error(err);
         yield put({
@@ -80,12 +78,8 @@ function* loadMyInfo(){
     }
 }
 
-function loadMyInfoAPI(token){
-    return axios.get('/auth',{}, {
-        headers: {
-            'Authorization': `Bearer ${token}`
-        }
-    });
+function loadMyInfoAPI(){
+    return axios.get('/auth/me');
 }
 
 function* watchLogOut(){
@@ -94,7 +88,7 @@ function* watchLogOut(){
 
 function* logOut(){
     try{
-        removeCookie('jwtToken')
+        Cookies.remove('jwtToken')
         yield put({
             type: LOG_OUT_SUCCESS
         })

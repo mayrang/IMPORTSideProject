@@ -20,15 +20,15 @@ export async function getReservation(req,res){ //getReservation without id
     let { year, month } = req.query;
     const { memberId } = req.query;
     const { reservationId } = req.params;
-    
+
     let startMonth = "";
     let endMonth = "";
     if(year){
         month *=1;
-        startMonth = year + '-'+ month + '-01';
-        endMonth = year + '-' + (month+1) + '-01'
+        startMonth = year + '-'+ (month < 10 ? "0" + (month) : month) + '-01';
+        endMonth = year + '-' + (month+1 < 10 ? "0" + (month+1) : month+1) + '-01'
     }
-
+    
     const reservationList = await (memberId?  reservationRepository.getByMemberId(memberId): reservationRepository.getMonthly(startMonth, endMonth));
     if(reservationList.length<1){
         res.sendStatus(204);
