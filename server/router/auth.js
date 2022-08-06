@@ -32,10 +32,10 @@ router.post('/signup', validateCredential, validateSignup, authController.signup
 
 
 // POST/auth/login
-router.post('/login', validateCredential, authController.login);
+router.post('/login', validateCredential, authController.login, );
 
 // GET/auth/me
-// router.get('/me', isAuth, authController.me);
+router.get('/me', isAuth, authController.me);
 
 // POST/auth/newpassword
 // router.post('/newpassword', isAuth, body('newpassword').trim().isLength({ min: 5 }).withMessage('password should be at least 5 characters'), authController.newpassword);
