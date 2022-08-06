@@ -11,30 +11,6 @@ export async function signup(req, res){
     const foundStudentId = await userRepository.findByStudentId(studentId);
     const foundPhoneNumber = await userRepository.findByPhoneNumber(phoneNumber);
     const foundEmail = await userRepository.findByEmail(email);
-    
-    // let errorMessage = {studentId : `${studentId}`,phoneNumber : `${phoneNumber}`,email : `${email}`};
-    // let errorMessage = {};
-    // if(foundStudentId){
-    //     // errorMessage+= `"studentId":"${studentId}"`;
-    //     errorMessage["studentId"] = [];
-    //     errorMessage["studentId"].push(`${studentId}`);
-    // }
-
-    // if(foundPhoneNumber){
-    //     // errorMessage+= `"phoneNumber":"${phoneNumber}"`;
-    //     errorMessage["phoneNumber"] = [];
-    //     errorMessage["phoneNumber"].push(`${phoneNumber}`);
-    // }
-
-    // if(foundEmail){
-    //     // errorMessage+= `email:"${email}"` ;
-    //     errorMessage["email"] = [];
-    //     errorMessage["email"].push(`${email}`);
-    // }
-    // JSON.stringify(errorMessage);
-    // if(foundStudentId || foundPhoneNumber || foundEmail){
-    //     return res.status(409).json(errorMessage);//오류코드
-    // }
 
     if(found){
         return res.status(409).json({ message: `${studentId} already exists` });//오류코드

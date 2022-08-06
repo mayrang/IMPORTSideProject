@@ -20,7 +20,7 @@ export async function getReservation(req,res){ //getReservation without id
     let { year, month } = req.query;
     const { memberId } = req.query;
     const { reservationId } = req.params;
-    // const memberId = req.memberId;
+    
     let startMonth = "";
     let endMonth = "";
     if(year){
@@ -29,19 +29,7 @@ export async function getReservation(req,res){ //getReservation without id
         endMonth = year + '-' + (month+1) + '-01'
     }
 
-
-    // const reservationList = await reservationRepository.getMonthly(startMonth, endMonth);
-
-    const reservationList = await (memberId? (reservationId? reservationRepository.getById(memberId, reservationId) // /reservation/[reservationId] 나중에 없애기
-                            : reservationRepository.getByMemberId(memberId))  // /reservation?memberId=
-                            : reservationRepository.getMonthly(startMonth, endMonth)); ///reservation?year=,month=
-
-
-
-    // console.log(reservationList);
-
-    // res.sendStatus(200);
-
+    const reservationList = await (memberId?  reservationRepository.getByMemberId(memberId): reservationRepository.getMonthly(startMonth, endMonth));
     if(reservationList.length<1){
         res.sendStatus(204);
     }
