@@ -22,7 +22,7 @@ const Edit = () => {
         }else{
             const checkPost = me.Posts.find((it) => it.reservationId === parseInt(id));
             
-            console.log(checkPost)
+
             if(!checkPost){
                 alert("수정권한이 없습니다.")
                 router.replace('/')
@@ -44,7 +44,7 @@ const Edit = () => {
 
 export const getServerSideProps = wrapper.getServerSideProps((store) => async ({req}) => {
     const cookie = req ? req.headers.cookie : '';
-    console.log(req&&cookieStringToObject(cookie)['jwtToken'])
+
     if(req&&cookieStringToObject(cookie)['jwtToken']){
         store.dispatch({
             type: LOAD_MY_INFO_REQUEST,

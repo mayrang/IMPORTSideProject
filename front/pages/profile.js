@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect } from "react";
 import { END } from "redux-saga";
-import {dummyMyPosts } from "../utils/dummy";
 import AppLayout from "../components/AppLayout";
 import {LOAD_MY_POSTS_REQUEST, REMOVE_POST_REQUEST } from "../reducers/post";
 import { LOAD_MY_INFO_REQUEST } from "../reducers/user";
@@ -10,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import { Button, Card, Collapse, Typography } from "antd";
 import { msToTime } from "../utils/timeFormat";
+import axios from "axios";
 
 
 
@@ -33,7 +33,7 @@ const makeArray = (posts) => {
 const Profile = () => {
     const {me} = useSelector((state) => state.user);
     const router = useRouter();
-    const {profilePosts, removePostLoading} = useSelector((state) => state.post);
+    const {profilePosts, removePostLoading, removePostDone} = useSelector((state) => state.post);
     const dispatch = useDispatch();
     useEffect(() => {
         if(!(me&&me.id)){
@@ -43,11 +43,16 @@ const Profile = () => {
             
             dispatch({
                 type: LOAD_MY_POSTS_REQUEST,
-                data: dummyMyPosts,
-                memberId: me.id
+                memberId: parseInt(me.id)
             });
         }
     }, [me&&me.id]);
+
+    useEffect(() => {
+        if(removePostDone){
+            router.reload();
+        }
+    }, [removePostDone])
 
 
     const clickEdit = useCallback((id) => {
@@ -86,12 +91,14 @@ const Profile = () => {
 
 export const getServerSideProps = wrapper.getServerSideProps((store) => async ({req}) => {
     const cookie = req ? req.headers.cookie : '';
-    console.log(req&&cookieStringToObject(cookie)['jwtToken'])
 
        
+    axios.defaults.headers.common['Authorization'] = "";
     if(req&&cookieStringToObject(cookie)['jwtToken']){
+        axios.defaults.headers.common['Authorization'] = `Bearer ${cookieStringToObject(cookie)['jwtToken']}`;
         store.dispatch({
             type: LOAD_MY_INFO_REQUEST,
+
         });
     }
     

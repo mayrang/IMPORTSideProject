@@ -6,6 +6,7 @@ import wrapper from "../store/configureStore";
 import ReservationForm from "../components/ReservationForm";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
+import axios from "axios";
 
 const Reservation = () => {
     const {me} = useSelector((state) => state.user)
@@ -24,12 +25,15 @@ const Reservation = () => {
 
 export const getServerSideProps = wrapper.getServerSideProps((store) => async ({req}) => {
     const cookie = req ? req.headers.cookie : '';
-    console.log(req&&cookieStringToObject(cookie)['jwtToken'])
+
     
 
+    axios.defaults.headers.common['Authorization'] = "";
     if(req&&cookieStringToObject(cookie)['jwtToken']){
+        axios.defaults.headers.common['Authorization'] = `Bearer ${cookieStringToObject(cookie)['jwtToken']}`;
         store.dispatch({
             type: LOAD_MY_INFO_REQUEST,
+
         });
     }
     

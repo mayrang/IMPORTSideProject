@@ -74,8 +74,7 @@ const ScheduleDiv = styled.div`
 
 
 const calendarArray = (year, month, posts, holidays) => {
-    console.log("holiday", holidays)
-    console.log("post", posts)
+
     let newMonth = [];
     let findPosts = {};
     let findHoliday = {}
@@ -97,13 +96,12 @@ const calendarArray = (year, month, posts, holidays) => {
                                         + (month < 10 ? "0" + (month) : month)
                                         + (count < 10 ? "0" + count : count);
                 if(posts){
-                    findPosts = posts.filter((it) => it.day === yearMonthDayPosts);
+                    findPosts = posts.filter((it) => it.rsvDate === yearMonthDayPosts);
                     findPosts.sort((a, b) => a.startTime - b.startTime);
                 }
                 if(holidays){
                     findHoliday = holidays.find((it) => it.locdate.toString() === yearMonthDayHolidays)
                 }
-                
                 if(findPosts){
                     if(findHoliday){
                         week.push({day: count.toString(), posts: findPosts, holidays: findHoliday});
@@ -217,7 +215,6 @@ const CalendarView = ({posts, holidays}) => {
         }else{
             const checkPost = me.Posts.find((it) => it.reservationId === parseInt(id));
             
-            console.log(checkPost)
             if(!checkPost){
                 alert("수정권한이 없습니다.")
                 router.replace('/')
@@ -236,7 +233,7 @@ const CalendarView = ({posts, holidays}) => {
                 dispatch({
                     type: REMOVE_POST_REQUEST,
                     reservationId: id,
-                    rsvMemberId: me
+                    rsvMemberId: me.id
                 })
             }else{
                 alert('삭제권한이 없습니다.')
