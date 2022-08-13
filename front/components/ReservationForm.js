@@ -116,7 +116,7 @@ const ReservationForm = ({value, edit, reservationId}) => {
                     setTimeWarning(true)
                     alert("다른 사람과 겹치는 시간에는 예약을 할 수 없습니다.")
                     
-            }else if(time[0] > time[1]){
+            }else if(time[0] >= time[1]){
                 alert("시간은 역전될수 없습니다.");
                 setTimeWarning(true);
             }else{
