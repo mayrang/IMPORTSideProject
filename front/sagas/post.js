@@ -104,7 +104,12 @@ function* loadMyPosts(action){
 }
 
 function loadMyPostsAPI(memberId){
-    return axios.get(`/reservation?memberId=${memberId}`);
+    return axios.get(`/reservation?memberId=${memberId}`, {}, {
+        headers: {
+            'Authorization': `Bearer ${Cookies.get('jwtToken')}`
+        },
+        params: {}
+    });
 }
 
 
@@ -158,6 +163,10 @@ function* removePost(action){
 function removePostAPI(reservationId, rsvMemberId){
     return axios.delete(`/reservation/${reservationId.toString()}`,  {
         data: {rsvMemberId: parseInt(rsvMemberId)},
+        headers: {
+            'Authorization': `Bearer ${Cookies.get('jwtToken')}`
+        },
+        params: {}
     });
 }
 
