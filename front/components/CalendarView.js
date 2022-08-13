@@ -57,7 +57,7 @@ const FloatButton = styled(Button)`
 
 const ScheduleDiv = styled.div`
     min-height: 10px;
-    background-color: #112667;
+    background-color: #0a5bf2;
     height: 20%;
     max-width: 100%;
     
@@ -200,7 +200,7 @@ const CalendarView = ({posts, holidays}) => {
         setModalDay(day);
     }, []);
 
-    const cancelModal = useCallback(() => {
+    const okModal = useCallback(() => {
         setVisible(false);
     }, []);
 
@@ -243,7 +243,7 @@ const CalendarView = ({posts, holidays}) => {
 
     return (
         <>
-        <Modal visible={visible} onCancel={cancelModal} title={modalDay + "일"}>
+        <Modal visible={visible} onOk={okModal} cancelButtonProps={{ style: { display: 'none' } }} closable={false} title={modalDay + "일"}>
             {modalPosts.length > 0 ?
             <List
                 itemLayout="horizontal"
