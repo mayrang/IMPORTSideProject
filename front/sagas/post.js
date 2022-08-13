@@ -137,7 +137,12 @@ function* editPost(action){
 }
 
 function editPostAPI(data, reservationId){
-    return axios.put(`/reservation/${reservationId}`, data);
+    return axios.put(`/reservation/${reservationId}`, data, {
+        headers: {
+            'Authorization': `Bearer ${Cookies.get('jwtToken')}`
+        },
+        params: {}
+    });
 }
 
 
