@@ -104,7 +104,7 @@ function* loadMyPosts(action){
 }
 
 function loadMyPostsAPI(memberId){
-    return axios.get(`/reservation?memberId=${memberId}`, {}, {
+    return axios.get(`/reservation?memberId=${memberId}`,{
         headers: {
             'Authorization': `Bearer ${Cookies.get('jwtToken')}`
         },
